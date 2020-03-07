@@ -1,6 +1,6 @@
 import math
 import sand_castle_shapes as shapes
-import wave 
+import wave as waves
 
 
 '''
@@ -22,35 +22,39 @@ GRAVITY = 9.81 # m / s^2
 #   Step 3: Start eroding in a loop by calling 
 #   
 #   
-'''
+
 print("Cube:")
 c = shapes.Cube(1)
 c.set_base_height(.5)
-print(c.get_eroded_vol())
-print(c.get_base_grains())
+#print(c.get_eroded_vol())
+#print(c.get_base_grains())
+print(c.get_cross_sectional_area())
 
 print("Pyramid:")
 c = shapes.Pyramid(1, 3)
 c.set_base_height(3)
-print(c.get_eroded_vol())
-print(c.get_base_grains())
+#print(c.get_eroded_vol())
+#print(c.get_base_grains())
 print(c.get_eroding_surface_area())
+print(c.get_cross_sectional_area())
 
 print("Cylinder:")
 r = (1/math.pi)**.5
 c = shapes.Cylinder(r, 1)
-c.set_base_height(.5)
-print(c.get_eroded_vol())
-print(c.get_base_grains())
+c.set_base_height(1)
+#print(c.get_eroded_vol())
+#print(c.get_base_grains())
+print(c.get_cross_sectional_area())
 
 print("Cone:")
 r = (3/math.pi)**.5
 c = shapes.Cone(r, 1)
 c.set_base_height(1)
-print(c.get_eroded_vol())
-print(c.get_base_grains())
+#print(c.get_eroded_vol())
+#print(c.get_base_grains())
 print(c.get_eroding_surface_area())
-'''
+print(c.get_cross_sectional_area())
+
 
 #Erodes the shape object with a wave
 def erode_shape(shape, wave):
@@ -104,4 +108,26 @@ print(c.get_eroding_surface_area())
 '''
 Loop for testing castle configurations
 '''
+#Cube loop
+#only one way to have a volume of 1 m^3 with a cube
+for i in range(1, 2):
+    #Make waves one cm at a time
+    for h in range(0, 100, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 100, 1):
+                    cube = shapes.Cube(i)
+                    wave = waves.Wave(h/100, d/5, dist/10)
+                    print('hi')
+
+#Cylinder loop
+
+
+
+#Pyramid loop
+
+
+
+#Cone loop
 
