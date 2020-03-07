@@ -83,6 +83,10 @@ class Cube:
         grains = vol / SAND_VOLUME
         return grains
 
+    #Returns the surface area of the eroding part of the cube
+    def get_eroding_surface_area(self) -> float:
+        return self.base_height * self.base_length * 4
+
 
     
     
@@ -155,6 +159,11 @@ class Cylinder:
         vol = self.get_eroded_vol() #m^3
         grains = vol / SAND_VOLUME
         return grains
+
+    #Returns the surface area of the eroding part of the cylinder
+    def get_eroding_surface_area(self) -> float:
+        circumference = self.base_radius * 2 * math.pi
+        return circumference * self.base_height
 
 
 
@@ -256,6 +265,25 @@ class Pyramid:
         return grains
 
 
+    #Returns the surface area of the eroding part of the pyramid
+    def get_eroding_surface_area(self) -> float:
+        #Get the theta value for the angle in the triangle we're considering
+        theta =  self.angle
+        #Make opposite, adjacent, and hypotenuse values
+        #See pics in git repo of big_board for the diagram on these values
+        opp = self.base_height 
+        hyp = opp / math.sin(theta)
+        adj = math.cos(theta) * hyp
+        #Get the lateral surface area of the frustum
+        #From: https://keisan.casio.com/exec/system/1223368185
+        a = self.base_side_length
+        b = a - 2*adj
+        h = self.base_height
+        surface_area = 2 * (a + b) * \
+                        (   ((a - b) / 2)**2 + h**2)**.5
+        return surface_area
+
+
 '''
 CONE
 '''
@@ -351,5 +379,16 @@ class Cone:
         vol = self.get_eroded_vol() #m^3
         grains = vol / SAND_VOLUME
         return grains
+
+
+    #Returns the lateral surface area of the bottom part of the Cone that does get hit by waves
+    def get_eroding_surface_area(self) -> float:
+        #From: https://keisan.casio.com/exec/system/1223372110
+        r1 = self.base_radius
+        r2 = self.get_radius_at_base_height()
+        h = self.base_height
+        surface_area = math.pi * (r1 + r2) * \
+                        (  (r1 - r2)**2   + h**2   )**.5
+        return surface_area 
 
 
