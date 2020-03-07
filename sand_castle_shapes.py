@@ -155,7 +155,7 @@ class Pyramid:
 
 
     #Constructor for Pyramids
-    def __init__(self, side: float, height:float ):
+    def __init__(self, side: float, height: float):
         self.side_length = side
         self.height = height
         self.base_radius = Pyramid.determine_square_radius(self, side)
@@ -201,9 +201,6 @@ class Pyramid:
         h = self.base_height
         vol = ((a**2 + a*b + b**2) * h) / 3
         return vol
-
-
-        
 
 
     #returns the average of the radii of the circle inscribed in the square base of the Cube
