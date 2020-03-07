@@ -4,6 +4,7 @@ import math
 CONSTANTS
 '''
 GRAVITY = 9.81 # m / s^2
+WATER_DENSITY = 1023.6 # kg / m^3
 
 
 #Wave class for packaging data and any methods we may need

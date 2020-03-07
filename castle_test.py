@@ -61,12 +61,19 @@ def erode_shape(shape, wave):
     #Now update the base radius of the shape
     post_erosion_radius = pre_erosion_radius - depth_eroded
     shape.update_base_radius(post_erosion_radius)
+    #If the shape has a base_side_length, update it
+    if type(shape) is shapes.Cube or type(shape) is shapes.Pyramid:
+        old_length = shape.base_side_length
+        new_length = old_length - 2 * depth_eroded
+        shape.base_side_length = new_length
+
 
 
 #calculates the number of grains washed away
 def num_grains_eroded(shape, wave) -> int:
     #NOTE: update this once cohesion force is known
     ''' NEED SAND BOND STRENGTH + WAVE FORCE '''
+    #cohesion_multiplier is how many times more powerful the wave is than the forces holding the sand particles together
     cohesion_multiplier = 0 
     #Round to an int so that if it's below the required force to break sand-bonds then the product is 0 and no sand is removed
     sand_removed = wave.wave_height * wave.wave_distance_past_castle * int(cohesion_multiplier)
@@ -92,4 +99,9 @@ w = wave.Wave(.1, 1, 2)
 print(c.get_eroding_surface_area())
 erode_shape(c, w)
 print(c.get_eroding_surface_area())
+
+
+'''
+Loop for testing castle configurations
+'''
 
