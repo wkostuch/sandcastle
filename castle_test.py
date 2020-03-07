@@ -1,6 +1,6 @@
 import math
 import sand_castle_shapes as shapes
-import waves 
+import wave 
 
 
 #NOTE:
@@ -12,7 +12,28 @@ import waves
 #   
 #   
 
+print("Cube:")
 c = shapes.Cube(1)
-c.set_base_height(.5)
+c.set_base_height(1)
+print(c.get_eroded_vol())
+print(c.get_base_grains())
+
+print("Pyramid:")
+c = shapes.Pyramid(1, 3)
+c.set_base_height(3)
+print(c.get_eroded_vol())
+print(c.get_base_grains())
+
+print("Cylinder:")
+r = (1/math.pi)**.5
+c = shapes.Cylinder(r, 1)
+c.set_base_height(1)
+print(c.get_eroded_vol())
+print(c.get_base_grains())
+
+print("Cone:")
+r = (3/math.pi)**.5
+c = shapes.Cone(r, 1)
+c.set_base_height(1)
 print(c.get_eroded_vol())
 print(c.get_base_grains())

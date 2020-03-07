@@ -120,6 +120,7 @@ class Cylinder:
     #Returns the area of the of the base of the Cylinder, even during erosion process
     def get_eroded_base(self) -> float:
         base = math.pi * self.base_radius * self.base_radius
+        return base
 
     #Returns the volume of the Cylinder as it currently stands
     def get_volume(self) -> float:
@@ -279,7 +280,7 @@ class Cone:
         self.height = h
         self.base_radius = r
         self.height_radius_ratio = h / r
-        self.angle = math.arctan(h / r)
+        self.angle = math.atan(h / r)
         
 
     #sets the base_height value, and the radius_above_base_height value as well
@@ -292,7 +293,7 @@ class Cone:
         #h is the height of the imaginary cone extending from the truncated cone that is the 
         # base being eroded; use the base_height_ratio to keep it consistent
         h = self.height_radius_ratio * self.base_radius #use the original height to radius ratio to find the height of the imaginary cone
-        r = get_radius_at_h(self.base_radius, h)
+        r = self.get_radius_at_h(self.base_radius, h)
         return r
 
     #returns the radius of the Cone at height h
@@ -325,9 +326,10 @@ class Cone:
     def get_eroded_vol(self) -> float:
         #From: https://keisan.casio.com/exec/system/1223372110
         r1 = self.base_radius
-        r2 = self.get_radius_at_base_height
+        r2 = self.get_radius_at_base_height()
         h = self.base_height
         vol = (math.pi * h * ( (r1 * r1) + (r1 * r2) + (r2 * r2) ) ) / 3
+        return vol
         
 
     #updates the base_radius
