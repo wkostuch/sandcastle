@@ -1,6 +1,7 @@
 import math
 import sand_castle_shapes as shapes
 import wave as waves
+import numpy as np
 
 
 '''
@@ -97,29 +98,40 @@ def grains_to_meters(n: float) -> float:
     return n * SAND_DIAMETER
 
 
-c = shapes.Cone(1, 3)
-c.set_base_height(1)
-w = wave.Wave(.1, 1, 2)
-print(c.get_eroding_surface_area())
-erode_shape(c, w)
-print(c.get_eroding_surface_area())
+#checks to see if the wave obliterates the castle completely
+# or if the base has become too eroded to support the top of the castle
+def castle_still_standing(shape, wave) -> bool:
+    #NOTE: split out obliteration and base-collapse into two separate predicate methods
+    return True
+
 
 
 '''
 Loop for testing castle configurations
 '''
 #Cube loop
+#make an empty array to hold results
+results_array = np.array(list())
 #only one way to have a volume of 1 m^3 with a cube
-for i in range(1, 2):
+for s in range(1, 2):
     #Make waves one cm at a time
-    for h in range(0, 100, 1):
+    for h in range(0, 10, 1):
         #now vary depth for wave break
             for d in range(1, 5, 1):
                 #now vary distance past the sandcastle
-                for dist in range(0, 100, 1):
-                    cube = shapes.Cube(i)
-                    wave = waves.Wave(h/100, d/5, dist/10)
-                    print('hi')
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    cube = shapes.Cube(s)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(cube, w):
+                        wave_hits +=1
+                        erode_shape(cube, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, cube, wave)
+                    results_array.append(t)
+
 
 #Cylinder loop
 
