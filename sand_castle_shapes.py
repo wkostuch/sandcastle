@@ -255,13 +255,13 @@ class Cone:
     #sets the base_height value, and the radius_above_base_height value as well
     def set_base_height(self, h: float) -> float:
         self.base_height = h
-        self.radius_above_base_height = self.get_radius_at_h(self.radius, h)
+        self.radius_above_base_height = self.get_radius_at_h(self.radius, h) #this value is used for top_volume method
 
     #Returns the radius value at base_height (so: radius at the top of the wave-erosion area)
     def get_radius_at_base_height(self) -> float:
         #h is the height of the imaginary cone extending from the truncated cone that is the 
         # base being eroded; use the base_height_ratio to keep it consistent
-        h = self.height_radius_ratio * self.base_radius
+        h = self.height_radius_ratio * self.base_radius #use the original height to radius ratio to find the height of the imaginary cone
         r = get_radius_at_h(self.base_radius, h)
         return r
 
@@ -293,8 +293,12 @@ class Cone:
 
     #Returns the volume of the bottom part of the Cone that does get hit by waves
     def get_eroded_vol(self) -> float:
-        #NOTE: find formula for truncated cone volumes
-        return self.base_height * self.get_eroded_base()
+        #From: https://keisan.casio.com/exec/system/1223372110
+        r1 = self.base_radius
+        r2 = self.get_radius_at_base_height
+        h = self.base_height
+        vol = (math.pi * h * ( (r1 * r1) + (r1 * r2) + (r2 * r2) ) ) / 3
+        
 
     #updates the base_radius
     def update_base_radius(self, n: float):
