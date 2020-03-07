@@ -6,6 +6,9 @@ import math
 CONSTANTS for use in the file
 '''
 SAND_DENSITY = 2082.0 # kg / m^3
+SAND_DIAMETER = 0.000375 # diameter in meters, aka 375 micro-meters
+SAND_RADIUS = SAND_DIAMETER / 2 #meters
+SAND_VOLUME = (4/3) * math.pi * (SAND_RADIUS**3)
 WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
 #Friendly reminder that N = (kg * m) / s^2
@@ -14,8 +17,8 @@ GRAVITY = 9.81 # m / s^2
 CUBE
 '''
 class Cube:
-    side_length: float
-    sand_grain_number: float
+    side_length: float   
+    base_grains: float
     base_radius: float
     base_side_length: float
     base_height: float
@@ -49,7 +52,7 @@ class Cube:
 
     #returns vol of part of cube being eroded
     def get_eroded_vol(self) -> float:
-        self.base_height * self.base_side_length * self.base_side_length
+        return self.base_height * self.base_side_length * self.base_side_length
 
 
     #returns the average of the radii of the circle inscribed in the square base of the Cube
@@ -72,6 +75,14 @@ class Cube:
         weight = top_vol * SAND_DENSITY * GRAVITY
         return weight
 
+    #Returns # of sand grains in the eroding base
+    def get_base_grains(self) -> float:
+        global SAND_DIAMETER
+        global SAND_VOLUME
+        vol = self.get_eroded_vol() #m^3
+        grains = vol / SAND_VOLUME
+        return grains
+
 
     
     
@@ -82,8 +93,8 @@ CYLINDER
 '''
 class Cylinder:
     radius: float
-    height: float
-    sand_grain_number: float
+    height: float    
+    base_grains: float
     base_radius: float
     base_height: float
     #NOTE: base_radius field is the radius we're using when determining when the sandcastle will fall;
@@ -136,6 +147,17 @@ class Cylinder:
         weight = top_vol * SAND_DENSITY * GRAVITY
         return weight
 
+    #Returns # of sand grains in the eroding base
+    def get_base_grains(self) -> float:
+        global SAND_DIAMETER
+        global SAND_VOLUME
+        vol = self.get_eroded_vol() #m^3
+        grains = vol / SAND_VOLUME
+        return grains
+
+
+
+
 
 '''
 PYRAMID
@@ -144,7 +166,7 @@ class Pyramid:
     side_length: float
     height: float
     angle: float #internal angle of the pyramid (two base angles of a cut-away pyramid slice)
-    sand_grain_number: float
+    base_grains: float
     base_radius: float
     base_side_length: float
     base_height: float
@@ -224,6 +246,14 @@ class Pyramid:
         weight = top_vol * SAND_DENSITY * GRAVITY
         return weight
 
+    #Returns # of sand grains in the eroding base
+    def get_base_grains(self) -> float:
+        global SAND_DIAMETER
+        global SAND_VOLUME
+        vol = self.get_eroded_vol() #m^3
+        grains = vol / SAND_VOLUME
+        return grains
+
 
 '''
 CONE
@@ -233,7 +263,7 @@ class Cone:
     radius: float
     height: float
     angle: float #internal angle of the cylinder in radians
-    sand_grain_number: float
+    base_grains: float
     base_height_ratio: float #used for getting r at a height for the truncated cone
     base_radius: float
     base_height: float
@@ -311,5 +341,13 @@ class Cone:
         top_vol = self.get_top_vol()
         weight = top_vol * SAND_DENSITY * GRAVITY
         return weight
+
+    #Returns # of sand grains in the eroding base
+    def get_base_grains(self) -> float:
+        global SAND_DIAMETER
+        global SAND_VOLUME
+        vol = self.get_eroded_vol() #m^3
+        grains = vol / SAND_VOLUME
+        return grains
 
 
