@@ -105,7 +105,17 @@ def castle_still_standing(shape, wave) -> bool:
     #NOTE: split out obliteration and base-collapse into two separate predicate methods
     return False
 
-#returns the shear stress of 
+#returns the force of a wave as applied to a shape
+def wave_force_on_shape(shape, wave) -> float:
+    global WATER_DENSITY
+    surface_area = shape.get_eroding_surface_area()
+    wave_velocity = wave.wave_velocity
+    force = WATER_DENSITY * surface_area * wave_velocity * wave_velocity
+    return force
+
+
+
+
 
 
 '''
@@ -150,6 +160,7 @@ for r in range(1, 11):
                     #Make a shape and a wave
                     r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
                     height = 1 / (math.pi * r * r)
+                    print("r: " + str(r) + " | h: " + str(height))
                     cylinder = shapes.Cylinder(r, height)
                     w = waves.Wave(h/100, d/5, dist/10)
                     cylinder.set_base_height(w.wave_height)
@@ -216,5 +227,6 @@ for r in range(1, 11):
                     #now add the results to the results_array
                     t = (wave_hits, cone, w)
                     cone_array.append(t)
+
 
 
