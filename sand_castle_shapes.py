@@ -32,7 +32,9 @@ class Cube:
     
     #to_string method for pretty printing
     def __str__(self):
-        return ""
+        return "Cube: side_length: " + str(self.side_length) + " | height: " + str(self.height) + \
+                 " | base_radius: " + str(self.base_radius) + " | base_side_length: " + str(self.base_side_length)
+                
 
     #Constructor for Cubes
     def __init__(self, side: float):
@@ -123,6 +125,11 @@ class Cylinder:
         self.height = h
         self.base_radius = r
 
+    #to_string method for pretty printing
+    def __str__(self):
+        return "Cylinder: radius: " + str(self.radius) + " | height: " + str(self.height) + \
+                 " | base_radius: " + str(self.base_radius) 
+
     #sets the base_height value
     def set_base_height(self, h: float) -> float:
         self.base_height = h
@@ -208,6 +215,12 @@ class Pyramid:
         self.base_radius = Pyramid.determine_square_radius(self, side)
         self.base_side_length = side
         self.angle = math.atan(height / (side / 2))
+
+
+    #to_string method for pretty printing
+    def __str__(self):
+        return "Pyramid: side_length: " + str(self.side_length) + " | height: " + str(self.height) + \
+                 " | base_radius: " + str(self.base_radius) + " | base_side_length: " + str(self.base_side_length)
     
     #sets the base_height value
     def set_base_height(self, h: float) -> float:
@@ -339,6 +352,11 @@ class Cone:
         self.base_radius = r
         self.height_radius_ratio = h / r
         self.angle = math.atan(h / r)
+
+    #to_string method for pretty printing
+    def __str__(self):
+        return "Cone: radius: " + str(self.radius) + " | height: " + str(self.height) + \
+                 " | base_radius: " + str(self.base_radius)
         
 
     #sets the base_height value, and the radius_above_base_height value as well
