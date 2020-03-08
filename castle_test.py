@@ -147,7 +147,9 @@ for s in range(1, 2):
                 #now vary distance past the sandcastle
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
-                    cube = shapes.Cube(s)
+                    side_length = VOL**(1/3)
+                    cube = shapes.Cube(side_length)
+                    #print(cube.side_length)
                     w = waves.Wave(h/100, d/5, dist/10)
                     cube.set_base_height(w.wave_height)
                     #now commence the testing!
@@ -206,7 +208,7 @@ for l in range(1, 11):
                     pyramid = shapes.Pyramid(length, height)
                     w = waves.Wave(h/100, d/5, dist/10)
                     #pyramid.set_base_height(w.wave_height)
-                    print("length: " + str(length) + " | h: " + str(height))
+                    #print("length: " + str(length) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
                     while castle_still_standing(pyramid, w):
