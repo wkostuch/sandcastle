@@ -20,15 +20,15 @@ J = 1.8663 #Bessel function number
 E = 30 * 1000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
 ALPHA = 0.054
 GAMMA = 70
-MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hits then we move on to the next one
-AVG_WAVE_HEIGHT = 0.05 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
+MAX_WAVE_HITS = 1000 #used in the test loops, if the castle survives this many hits then we move on to the next one
+AVG_WAVE_HEIGHT = 0.08 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
 AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 # meters 
 
 MIN_CASTLE_RADIUS = 0.10 # meters
 MAX_CASTLE_RADIUS = 0.40 # meters
 MIN_CASTLE_HEIGHT = 0.08
 MAX_CASTLE_HEIGHT = 1
-VOL = 0.05 # m^3 | constant for the volume of sand we're using
+VOL = 0.5 # m^3 | constant for the volume of sand we're using
 
 
 #Friendly reminder that N = (kg * m) / s^2
@@ -180,7 +180,7 @@ INCREMENT = (END_SHAPE_HEIGHT - START_SHAPE_HEIGHT) / (R-1)
 #Cube loop
 #make an empty array to hold results
 cube_array = list()
-#only one way to have a volume of 1 m^3 with a cube
+#only one way to have a volume of VOL m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
     for h in range(1, INC):
