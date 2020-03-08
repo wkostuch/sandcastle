@@ -23,6 +23,9 @@ class Wave:
         self.break_depth = depth
         self.wave_distance_past_castle = dist
         self.wave_speed = (depth * GRAVITY)**.5
+
+    def __str__(self):
+        return "Height: " + str(self.wave_height) + " , Depth: " + str(self.break_depth) + " , Speed: " + str(self.wave_speed) + " , Distance " + str(self.wave_distance_past_castle)
         
     #returns the momentum of the wave as its strength
     def wave_strength(self) -> float:
