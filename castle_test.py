@@ -23,17 +23,13 @@ GAMMA = 70
 MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hits then we move on to the next one
 AVG_WAVE_HEIGHT = 0.05 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
 AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 # meters 
-<<<<<<< HEAD
+
 MIN_CASTLE_RADIUS = 0.10 # meters
 MAX_CASTLE_RADIUS = 0.40 # meters
 MIN_CASTLE_HEIGHT = 0.08
 MAX_CASTLE_HEIGHT = 1
-VOL = 0.5 # m^3 | constant for the volume of sand we're using
-=======
-MIN_CASTLE_RADIUS = 0.05 # meters
-MAX_CASTLE_RADIUS = 0.30 # meters
 VOL = 0.05 # m^3 | constant for the volume of sand we're using
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
+
 
 #Friendly reminder that N = (kg * m) / s^2
 
@@ -151,18 +147,13 @@ Loop for testing castle configurations
 '''
 #Stuff for the loopsies
 #Radii for the non-cube castles:
-<<<<<<< HEAD
+
 START_RADIUS = int(MIN_CASTLE_RADIUS * 10)
 END_RADIUS = int(MAX_CASTLE_RADIUS * 10)
 
 START_SHAPE_HEIGHT = int(MIN_CASTLE_HEIGHT * 100)
 END_SHAPE_HEIGHT = int(MAX_CASTLE_HEIGHT * 100)
-=======
-START_RADIUS = int(MIN_CASTLE_RADIUS * 100)
-END_RADIUS = int(MAX_CASTLE_RADIUS * 100)
-print(START_RADIUS)
-print(END_RADIUS)
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
+
 #Wave height:
 START_HEIGHT = int(AVG_WAVE_HEIGHT * 100 *.85)
 END_HEIGHT = int(AVG_WAVE_HEIGHT * 100 * 1.15) * 10
@@ -201,13 +192,8 @@ for s in range(1, 2):
                 while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
                     wave_hits +=1
                     erode_shape(cube, w)
-<<<<<<< HEAD
                     #print("base_radius: " + str(cube.base_radius))
                 #print("Took " + str(wave_hits) + " to knock this cube over!")
-=======
-                    print("base_radius: " + str(cube.base_radius))
-                print("Took " + str(wave_hits) + " to knock this cube over!")
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
                 #now add the results to the results_array
                 t = (wave_hits, cube, w)
                 cube_array.append(t)
@@ -282,10 +268,6 @@ print("Size of pyramid_array: " + str(len(pyramid_array)))
 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
 #Cone loop
 #make an empty array to hold stuff
 cone_array = list()
@@ -298,13 +280,9 @@ for r in range(START_SHAPE_HEIGHT, END_SHAPE_HEIGHT):
                 #now vary distance past the sandcastle
                 for dist in range(START_DISTANCE, END_DISTANCE, 1):
                     #Make a shape and a wave
-<<<<<<< HEAD
                     height = (r / 100) + 0.00001 #Adding this to keep form dividing by zero
                     rad = math.sqrt((3 * VOL) / (math.pi * height))
-=======
-                    rad = (r/10)  + 0.00001 #Adding this to keep form dividing by zero
-                    height = (3 * VOL) / (math.pi * rad * rad)
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
+
                     cone = shapes.Cone(rad, h)
                     w = waves.Wave(h/100, d/100, dist/10)
                     cone.set_base_height(w.wave_height)
@@ -317,22 +295,12 @@ for r in range(START_SHAPE_HEIGHT, END_SHAPE_HEIGHT):
                         erode_shape(cone, w)
 
                     #now add the results to the results_array
-<<<<<<< HEAD
-                    #print("Took " + str(wave_hits) + " to knock this cone over!")
-=======
                     print("base_radius: " + str(cone.base_radius))
                     print("Took " + str(wave_hits) + " to knock this cone over!")
                     print(str(w))
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
                     t = (wave_hits, cone, w)
                     cone_array.append(t)
 print("Size of cone_array: " + str(len(cone_array)))
-
-<<<<<<< HEAD
-
-
-
-
 
 
 def get_statistics(shape_array):
@@ -352,5 +320,3 @@ def average_wave_hits(shape_array) -> float:
 print(average_wave_hits(cone_array))
 print(average_wave_hits(cube_array))
 print(average_wave_hits(cylinder_array))
-=======
->>>>>>> da8c68a2cec3f7f43629299a298992e08c0e9f7c
