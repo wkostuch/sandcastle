@@ -17,7 +17,8 @@ GRAVITY = 9.81 # m / s^2
 CUBE
 '''
 class Cube:
-    side_length: float   
+    side_length: float
+    height: float   
     base_grains: float
     base_radius: float
     base_side_length: float
@@ -31,6 +32,7 @@ class Cube:
     #Constructor for Cubes
     def __init__(self, side: float):
         self.side_length = side
+        self.height = side
         self.base_radius = Cube.determine_square_radius(self, side)
         self.base_side_length = side
     
@@ -85,7 +87,7 @@ class Cube:
 
     #Returns the surface area of the eroding part of the cube
     def get_eroding_surface_area(self) -> float:
-        return self.base_height * self.base_side_length * 4
+        return self.base_height * self.base_side_length * 4 + 0.00001 #add a little to make sure we don't divide by 0
 
     #returns cross-sectional area of the top part being eroded
     def get_cross_sectional_area(self) -> float:
@@ -167,7 +169,7 @@ class Cylinder:
     #Returns the surface area of the eroding part of the cylinder
     def get_eroding_surface_area(self) -> float:
         circumference = self.base_radius * 2 * math.pi
-        return circumference * self.base_height
+        return circumference * self.base_height + 0.00001 #add a little to make sure we don't divide by 0
 
     #returns cross-sectional area of the top part being eroded
     def get_cross_sectional_area(self) -> float:
@@ -289,7 +291,7 @@ class Pyramid:
         h = self.base_height
         surface_area = 2 * (a + b) * \
                         (   ((a - b) / 2)**2 + h**2)**.5
-        return surface_area
+        return surface_area + 0.00001 #add a little to make sure we don't divide by 0
 
     #returns cross-sectional area of the top part being eroded
     def get_cross_sectional_area(self) -> float:
@@ -412,7 +414,7 @@ class Cone:
         h = self.base_height
         surface_area = math.pi * (r1 + r2) * \
                         (  (r1 - r2)**2   + h**2   )**.5
-        return surface_area 
+        return surface_area + 0.00001 #add a little to make sure we don't divide by 0
 
     #returns cross-sectional area of the top part being eroded
     def get_cross_sectional_area(self) -> float:

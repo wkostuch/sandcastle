@@ -15,7 +15,12 @@ SAND_VOLUME = (4/3) * math.pi * (SAND_RADIUS**3)
 WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
 Z = 6 #max bond number for sand grains with water
-VOL = 0.3 #constant for the volume of sand we're using
+VOL = 0.1 #constant for the volume of sand we're using
+J = 1.8663 #Bessel function number
+E = 30 * 1000000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
+ALPHA = 0.054
+GAMMA = 70
+
 #Friendly reminder that N = (kg * m) / s^2
 
 #NOTE:
@@ -69,6 +74,7 @@ def erode_shape(shape, wave):
     depth_eroded = grains_to_meters(layers_eroded)
     #Now update the base radius of the shape
     post_erosion_radius = pre_erosion_radius - depth_eroded
+    #print("post_erosion: " + str(post_erosion_radius))
     shape.update_base_radius(post_erosion_radius)
     #If the shape has a base_side_length, update it
     if type(shape) is shapes.Cube or type(shape) is shapes.Pyramid:
@@ -107,8 +113,8 @@ def grains_to_meters(n: float) -> float:
 # or if the base has become too eroded to support the top of the castle
 def castle_still_standing(shape, wave) -> bool:
     #NOTE: split out obliteration and base-collapse into two separate predicate methods
-    #return standing_after_wave_hit(shape, wave) #and standing_after_erosion(shape, wave)
-    return False
+    return (shape.base_radius > 0) and standing_after_wave_hit(shape, wave) and standing_after_erosion(shape, wave)
+
 
 #returns the force of a wave as applied to a shape
 def wave_force_on_shape(shape, wave) -> float:
@@ -125,7 +131,33 @@ def standing_after_wave_hit(shape, wave) -> bool:
     wave_force = wave_force_on_shape(shape, wave)
     #calculate wave shear
     wave_shear = wave_force / shape.get_cross_sectional_area()
-    return wave_shear < max_shear_strength
+    #return wave_shear < max_shear_strength
+    if wave_shear < max_shear_strength:
+        return True
+    else:
+        #print("Knocked over by a wave")
+        return False
+
+#returns a boolean on if the castle is still standing after being eroded
+def standing_after_erosion(shape, wave) -> bool:
+    global SAND_DENSITY
+    global E
+    global GRAVITY
+    global J
+    global E
+    global GAMMA
+    global ALPHA
+    G = ALPHA * shape.base_radius**(-1/3) * E**(2/3) * GAMMA**(1/3)
+    r = shape.base_radius
+    #From the Nature article
+    crit_height = (( (9 * J * J) / 16) \
+                  * ( (G * r * r) / (SAND_DENSITY * GRAVITY)))**(1/3)
+    #return shape.height <= crit_height
+    if shape.height <= crit_height:
+        return True
+    else:
+        #print("Collapsed due to erosion")
+        return False
 
 
 
@@ -134,6 +166,7 @@ def standing_after_wave_hit(shape, wave) -> bool:
 
 '''
 Loop for testing castle configurations
+'''
 '''
 #Cube loop
 #make an empty array to hold results
@@ -154,14 +187,18 @@ for s in range(1, 2):
                     cube.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cube, w):
+                    while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < 200:
                         wave_hits +=1
                         erode_shape(cube, w)
+                        #print("base_radius: " + str(cube.base_radius))
+                    print("Took " + str(wave_hits) + " to knock this cube over!")
                     #now add the results to the results_array
                     t = (wave_hits, cube, w)
                     cube_array.append(t)
+print("Size of cube_array: " + str(len(cube_array)))
+'''
 
-
+'''
 #Cylinder loop
 #make an empty array to hold stuff
 cylinder_array = list()
@@ -182,15 +219,19 @@ for r in range(1, 11):
                     cylinder.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cylinder, w):
+                    while castle_still_standing(cylinder, w) and cylinder.base_radius > 0 and wave_hits < 200:
                         wave_hits +=1
+                        print("base_radius: " + str(cylinder.base_radius))
                         erode_shape(cylinder, w)
                     #now add the results to the results_array
+                    print("Took " + str(wave_hits) + " to knock this cylinder over!")
                     t = (wave_hits, cylinder, w)
                     cylinder_array.append(t)
+print("Size of cylinder_array: " + str(len(cylinder_array)))
+'''
 
 
-
+'''
 #Pyramid loop
 #make an empty array to hold stuff
 pyramid_array = list()
@@ -211,14 +252,19 @@ for l in range(1, 11):
                     #print("length: " + str(length) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(pyramid, w):
+                    while castle_still_standing(pyramid, w) and pyramid.base_radius > 0 and wave_hits < 200:
                         wave_hits +=1
+                        #print("base_radius: " + str(pyramid.base_radius))
                         erode_shape(pyramid, w)
                     #now add the results to the results_array
+                    #print("Took " + str(wave_hits) + " to knock this pyramid over!")
                     t = (wave_hits, pyramid, w)
                     pyramid_array.append(t)
+print("Size of pyramid_array: " + str(len(pyramid_array)))
+'''
 
 
+'''
 #Cone loop
 #make an empty array to hold stuff
 cone_array = list()
@@ -239,12 +285,14 @@ for r in range(1, 11):
                     #print("r: " + str(rad) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cone, w):
+                    while castle_still_standing(cone, w) and cone.base_radius > 0 and wave_hits < 200:
                         wave_hits +=1
+                        #print("base_radius: " + str(cone.base_radius))
                         erode_shape(cone, w)
                     #now add the results to the results_array
+                    print("Took " + str(wave_hits) + " to knock this cone over!")
                     t = (wave_hits, cone, w)
                     cone_array.append(t)
-
-
+print("Size of cone_array: " + str(len(cone_array)))
+'''
 
