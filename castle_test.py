@@ -30,6 +30,17 @@ MIN_CASTLE_HEIGHT = 0.08
 MAX_CASTLE_HEIGHT = 1
 VOL = 0.5 # m^3 | constant for the volume of sand we're using
 
+#dictionaries for keeping track of stuff
+erosion_dict = dict()
+knockout_dict = dict()
+did_not_fall_dict = dict()
+#Put stuff in the dictionaries 
+shape_list = ["cube", "cylinder", "pyramid", "cone"]
+for s in shape_list:
+    erosion_dict[s] = 0
+    knockout_dict[s] = 0
+    did_not_fall_dict[s] = 0
+
 
 #Friendly reminder that N = (kg * m) / s^2
 
@@ -70,7 +81,7 @@ def num_grains_eroded(shape, wave) -> int:
     cohesion = calc.cohesion(Z)
     cohesion_multiplier = wave_force / cohesion
     #Round to an int so that if it's below the required force to break sand-bonds then the product is 0 and no sand is removed
-    sand_removed = wave.wave_height * wave.wave_distance_past_castle * int(cohesion_multiplier)
+    sand_removed = wave.wave_height * wave.wave_distance_past_castle * cohesion_multiplier
     return sand_removed
 
 #calculates the number of layers eroded by a wave
@@ -118,6 +129,9 @@ def standing_after_wave_hit(shape, wave) -> bool:
         return True
     else:
         #print("Knocked over by a wave")
+        s = shape.string_name()
+        val = knockout_dict[s]
+        knockout_dict[s] = val + 1
         return False
 
 #returns a boolean on if the castle is still standing after being eroded
@@ -136,10 +150,23 @@ def standing_after_erosion(shape, wave) -> bool:
                   * ( (G * r * r) / (SAND_DENSITY * GRAVITY)))**(1/3)
     #Now check each shape:
     if type(shape) is shapes.Cylinder or type(shape) is shapes.Cube:
-        return shape.height <= crit_height
+        if shape.height <= crit_height:
+            return True
+        else:
+            s = shape.string_name()
+            val = erosion_dict[s]
+            erosion_dict[s] = val + 1
+            return False
     elif type(shape) is shapes.Cone or type(shape) is shapes.Pyramid:
-        return shape.height <= 3 * crit_height
         #Multiply by 3 since the volume of a cone/pyramid is 1/3 the volume of a cylinder/cube
+        if shape.height <= 3 *crit_height:
+            return True
+        else:
+            s = shape.string_name()
+            val = erosion_dict[s]
+            erosion_dict[s] = val + 1
+            return False
+
 
 
 '''
@@ -155,7 +182,6 @@ R = 101 #How many times to build a shape and hit it with waves
 START_HEIGHT = AVG_WAVE_HEIGHT * .9
 END_HEIGHT = AVG_WAVE_HEIGHT * 1.1
 HEIGHT_INCREMENT = (END_HEIGHT - START_HEIGHT) / INC
-print(str(END_HEIGHT - START_HEIGHT))
 
 #Wave break depth:
 START_DEPTH = AVG_BREAK_DEPTH  * .9
@@ -346,9 +372,12 @@ def average_wave_hits(shape_array) -> float:
 
 
 
-print(average_wave_hits(cube_array))
-print(average_wave_hits(cylinder_array))
-print(average_wave_hits(pyramid_array))
-print(average_wave_hits(cone_array))
+print("Cube average: "  + str(average_wave_hits(cube_array)))
+print("Cylinder average: " + str(average_wave_hits(cylinder_array)))
+print("Pyramid average: " + str(average_wave_hits(pyramid_array)))
+print("Cone average: " + str(average_wave_hits(cone_array)))
+
+print("Erosion stats: " + str(erosion_dict))
+print("Knockout stats: " + str(knockout_dict))
 
 

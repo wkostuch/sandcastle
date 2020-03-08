@@ -34,6 +34,10 @@ class Cube:
     def __str__(self):
         return "Cube: side_length: " + str(self.side_length) + " | height: " + str(self.height) + \
                  " | base_radius: " + str(self.base_radius) + " | base_side_length: " + str(self.base_side_length)
+
+    #used in dictionary mapping
+    def string_name(self) -> str:
+        return "cube"
                 
 
     #Constructor for Cubes
@@ -130,6 +134,10 @@ class Cylinder:
         return "Cylinder: radius: " + str(self.radius) + " | height: " + str(self.height) + \
                  " | base_radius: " + str(self.base_radius) 
 
+    #used in dictionary mapping
+    def string_name(self):
+        return "cylinder"
+
     #sets the base_height value
     def set_base_height(self, h: float) -> float:
         self.base_height = h
@@ -221,6 +229,10 @@ class Pyramid:
     def __str__(self):
         return "Pyramid: side_length: " + str(self.side_length) + " | height: " + str(self.height) + \
                  " | base_radius: " + str(self.base_radius) + " | base_side_length: " + str(self.base_side_length)
+
+    #used in dictionary mapping
+    def string_name(self):
+        return "pyramid"
     
     #sets the base_height value
     def set_base_height(self, h: float) -> float:
@@ -358,6 +370,9 @@ class Cone:
         return "Cone: radius: " + str(self.radius) + " | height: " + str(self.height) + \
                  " | base_radius: " + str(self.base_radius)
         
+    #used in dictionary mapping
+    def string_name(self):
+        return "cone"
 
     #sets the base_height value, and the radius_above_base_height value as well
     def set_base_height(self, h: float) -> float:
