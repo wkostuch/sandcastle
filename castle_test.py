@@ -1,6 +1,7 @@
 import math
 import sand_castle_shapes as shapes
 import wave as waves
+import numpy as np
 
 
 '''
@@ -76,8 +77,9 @@ def erode_shape(shape, wave):
 #calculates the number of grains washed away
 def num_grains_eroded(shape, wave) -> int:
     #NOTE: update this once cohesion force is known
-    ''' NEED SAND BOND STRENGTH + WAVE FORCE '''
     #cohesion_multiplier is how many times more powerful the wave is than the forces holding the sand particles together
+    wave_force = wave.wave_strength()
+    ''' NEED SAND BOND STRENGTH'''
     cohesion_multiplier = 0 
     #Round to an int so that if it's below the required force to break sand-bonds then the product is 0 and no sand is removed
     sand_removed = wave.wave_height * wave.wave_distance_past_castle * int(cohesion_multiplier)
@@ -97,37 +99,122 @@ def grains_to_meters(n: float) -> float:
     return n * SAND_DIAMETER
 
 
-c = shapes.Cone(1, 3)
-c.set_base_height(1)
-w = wave.Wave(.1, 1, 2)
-print(c.get_eroding_surface_area())
-erode_shape(c, w)
-print(c.get_eroding_surface_area())
+#checks to see if the wave obliterates the castle completely
+# or if the base has become too eroded to support the top of the castle
+def castle_still_standing(shape, wave) -> bool:
+    #NOTE: split out obliteration and base-collapse into two separate predicate methods
+    return False
+
+#returns the shear stress of 
 
 
 '''
 Loop for testing castle configurations
 '''
 #Cube loop
+#make an empty array to hold results
+cube_array = list()
 #only one way to have a volume of 1 m^3 with a cube
-for i in range(1, 2):
+for s in range(1, 2):
     #Make waves one cm at a time
-    for h in range(0, 100, 1):
+    for h in range(0, 10, 1):
         #now vary depth for wave break
             for d in range(1, 5, 1):
                 #now vary distance past the sandcastle
-                for dist in range(0, 100, 1):
-                    cube = shapes.Cube(i)
-                    wave = waves.Wave(h/100, d/5, dist/10)
-                    print('hi')
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    cube = shapes.Cube(s)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    cube.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(cube, w):
+                        wave_hits +=1
+                        erode_shape(cube, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, cube, w)
+                    cube_array.append(t)
+
 
 #Cylinder loop
+#make an empty array to hold stuff
+cylinder_array = list()
+#time to permute our stuff
+for r in range(1, 11):
+    #Make waves one cm at a time
+    for h in range(0, 10, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 1 / (math.pi * r * r)
+                    cylinder = shapes.Cylinder(r, height)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    cylinder.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(cylinder, w):
+                        wave_hits +=1
+                        erode_shape(cylinder, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, cylinder, w)
+                    cylinder_array.append(t)
 
 
 
 #Pyramid loop
-
+#make an empty array to hold stuff
+pyramid_array = list()
+#time to permute our stuff
+for l in range(1, 11):
+    #Make waves one cm at a time
+    for h in range(0, 10, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    l = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 3 / (l * l)
+                    pyramid = shapes.Pyramid(l, height)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    pyramid.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(pyramid, w):
+                        wave_hits +=1
+                        erode_shape(pyramid, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, pyramid, w)
+                    pyramid_array.append(t)
 
 
 #Cone loop
+#make an empty array to hold stuff
+cone_array = list()
+#time to permute our stuff
+for r in range(1, 11):
+    #Make waves one cm at a time
+    for h in range(0, 10, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    h = 3 / (math.pi * r * r)
+                    cone = shapes.Cone(r, h)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    cone.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(cone, w):
+                        wave_hits +=1
+                        erode_shape(cone, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, cone, w)
+                    cone_array.append(t)
+
 

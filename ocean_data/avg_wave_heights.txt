@@ -1,0 +1,5 @@
+scripps_east_florida average waveheight: 1.03 m
+scripps2_east_florida average waveheight: 0.758 m
+scripps_mid_california average waveheight: 1.52 m
+scripps_south_california average waveheight: 1.03 m
+scripps2_south_california average waveheight: 0.857 m

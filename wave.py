@@ -14,6 +14,7 @@ class Wave:
     wave_speed: float # m / s
     wave_distance_past_castle: float # meters; 
 
+    #Constructor
     def __init__(self, height: float, depth: float, dist: float):
         global GRAVITY
         self.wave_height = height
@@ -21,3 +22,7 @@ class Wave:
         self.wave_distance_past_castle = dist
         self.wave_speed = (depth * GRAVITY)**.5
         
+    #returns the momentum of the wave as its strength
+    def wave_strength(self) -> float:
+        global WATER_DENSITY
+        momentum = WATER_DENSITY * self.wave_height * self.wave_speed
