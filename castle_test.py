@@ -20,6 +20,7 @@ J = 1.8663 #Bessel function number
 E = 30 * 1000000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
 ALPHA = 0.054
 GAMMA = 70
+MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hits then we move on to the next one
 
 #Friendly reminder that N = (kg * m) / s^2
 
@@ -187,7 +188,7 @@ for s in range(1, 2):
                     cube.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < 200:
+                    while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
                         wave_hits +=1
                         erode_shape(cube, w)
                         #print("base_radius: " + str(cube.base_radius))
@@ -219,7 +220,7 @@ for r in range(1, 11):
                     cylinder.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cylinder, w) and cylinder.base_radius > 0 and wave_hits < 200:
+                    while castle_still_standing(cylinder, w) and cylinder.base_radius > 0 and MAX_WAVE_HITS < 200:
                         wave_hits +=1
                         print("base_radius: " + str(cylinder.base_radius))
                         erode_shape(cylinder, w)
@@ -252,7 +253,7 @@ for l in range(1, 11):
                     #print("length: " + str(length) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(pyramid, w) and pyramid.base_radius > 0 and wave_hits < 200:
+                    while castle_still_standing(pyramid, w) and pyramid.base_radius > 0 and MAX_WAVE_HITS < 200:
                         wave_hits +=1
                         #print("base_radius: " + str(pyramid.base_radius))
                         erode_shape(pyramid, w)
@@ -285,7 +286,7 @@ for r in range(1, 11):
                     #print("r: " + str(rad) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cone, w) and cone.base_radius > 0 and wave_hits < 200:
+                    while castle_still_standing(cone, w) and cone.base_radius > 0 and MAX_WAVE_HITS < 200:
                         wave_hits +=1
                         #print("base_radius: " + str(cone.base_radius))
                         erode_shape(cone, w)
