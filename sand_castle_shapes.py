@@ -85,7 +85,7 @@ class Cube:
 
     #Returns the surface area of the eroding part of the cube
     def get_eroding_surface_area(self) -> float:
-        return self.base_height * self.base_length * 4
+        return self.base_height * self.base_side_length * 4
 
     #returns cross-sectional area of the top part being eroded
     def get_cross_sectional_area(self) -> float:
@@ -211,8 +211,8 @@ class Pyramid:
         #volume of the area unchanged by wave erosion
         top_vol = self.get_top_vol()
         #volume of the area being eroded
-        bottom_vol = self.get_eroded_vol
-        return self.top_vol + self.bottom_vol
+        bottom_vol = self.get_eroded_vol()
+        return top_vol + bottom_vol
 
     #returns volume of a classic pyramid, NOT ours in particular
     #s = length of the side

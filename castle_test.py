@@ -103,8 +103,9 @@ def grains_to_meters(n: float) -> float:
 # or if the base has become too eroded to support the top of the castle
 def castle_still_standing(shape, wave) -> bool:
     #NOTE: split out obliteration and base-collapse into two separate predicate methods
-    return True
+    return False
 
+#returns the shear stress of 
 
 
 '''
@@ -112,7 +113,7 @@ Loop for testing castle configurations
 '''
 #Cube loop
 #make an empty array to hold results
-results_array = np.array(list())
+cube_array = list()
 #only one way to have a volume of 1 m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
@@ -124,23 +125,96 @@ for s in range(1, 2):
                     #Make a shape and a wave
                     cube = shapes.Cube(s)
                     w = waves.Wave(h/100, d/5, dist/10)
+                    cube.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
                     while castle_still_standing(cube, w):
                         wave_hits +=1
                         erode_shape(cube, w)
                     #now add the results to the results_array
-                    t = (wave_hits, cube, wave)
-                    results_array.append(t)
+                    t = (wave_hits, cube, w)
+                    cube_array.append(t)
 
 
 #Cylinder loop
+#make an empty array to hold stuff
+cylinder_array = list()
+#time to permute our stuff
+for r in range(1, 11):
+    #Make waves one cm at a time
+    for h in range(0, 10, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 1 / (math.pi * r * r)
+                    cylinder = shapes.Cylinder(r, height)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    cylinder.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(cylinder, w):
+                        wave_hits +=1
+                        erode_shape(cylinder, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, cylinder, w)
+                    cylinder_array.append(t)
 
 
 
 #Pyramid loop
-
+#make an empty array to hold stuff
+pyramid_array = list()
+#time to permute our stuff
+for l in range(1, 11):
+    #Make waves one cm at a time
+    for h in range(0, 10, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    l = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 3 / (l * l)
+                    pyramid = shapes.Pyramid(l, height)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    pyramid.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(pyramid, w):
+                        wave_hits +=1
+                        erode_shape(pyramid, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, pyramid, w)
+                    pyramid_array.append(t)
 
 
 #Cone loop
+#make an empty array to hold stuff
+cone_array = list()
+#time to permute our stuff
+for r in range(1, 11):
+    #Make waves one cm at a time
+    for h in range(0, 10, 1):
+        #now vary depth for wave break
+            for d in range(1, 5, 1):
+                #now vary distance past the sandcastle
+                for dist in range(0, 10, 1):
+                    #Make a shape and a wave
+                    r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    h = 3 / (math.pi * r * r)
+                    cone = shapes.Cone(r, h)
+                    w = waves.Wave(h/100, d/5, dist/10)
+                    cone.set_base_height(w.wave_height)
+                    #now commence the testing!
+                    wave_hits = 0
+                    while castle_still_standing(cone, w):
+                        wave_hits +=1
+                        erode_shape(cone, w)
+                    #now add the results to the results_array
+                    t = (wave_hits, cone, w)
+                    cone_array.append(t)
+
 
