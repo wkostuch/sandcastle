@@ -160,7 +160,7 @@ START_DEPTH = int(AVG_BREAK_DEPTH * 100 * .85)
 END_DEPTH = int(AVG_BREAK_DEPTH * 100 *1.15) * 10
 #Distance past the castle in meters
 START_DISTANCE = 0
-END_DISTANCE = 25
+END_DISTANCE = 200
 
 '''
 #Cube loop
@@ -278,7 +278,7 @@ for r in range(START_RADIUS, END_RADIUS):
                     rad = (r/10)  + 0.00001 #Adding this to keep form dividing by zero
                     height = (3 * VOL) / (math.pi * rad * rad)
                     cone = shapes.Cone(rad, h)
-                    w = waves.Wave(h/100, d/100, dist/10)
+                    w = waves.Wave(h/100, d/100, dist/100)
                     cone.set_base_height(w.wave_height)
                     print("r: " + str(rad) + " | h: " + str(height))
                     #now commence the testing!
@@ -289,7 +289,7 @@ for r in range(START_RADIUS, END_RADIUS):
                         erode_shape(cone, w)
 
                     #now add the results to the results_array
-                    print("base_radius: " + str(cone.base_radius))
+                    print(str(cone))
                     print("Took " + str(wave_hits) + " to knock this cone over!")
                     print(str(w))
                     t = (wave_hits, cone, w)
