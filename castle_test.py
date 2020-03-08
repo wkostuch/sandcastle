@@ -15,12 +15,16 @@ SAND_VOLUME = (4/3) * math.pi * (SAND_RADIUS**3)
 WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
 Z = 6 #max bond number for sand grains with water
-VOL = 0.1 #constant for the volume of sand we're using
 J = 1.8663 #Bessel function number
 E = 30 * 1000000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
 ALPHA = 0.054
 GAMMA = 70
 MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hits then we move on to the next one
+AVG_WAVE_HEIGHT = 0.02 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
+AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 # meters 
+MIN_CASTLE_RADIUS = 0.10 # meters
+MAX_CASTLE_RADIUS = 0.40 # meters
+VOL = 0.05 # m^3 | constant for the volume of sand we're using
 
 #Friendly reminder that N = (kg * m) / s^2
 
@@ -33,39 +37,7 @@ MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hi
 #   
 #   
 
-'''
-print("Cube:")
-c = shapes.Cube(1)
-c.set_base_height(.5)
-#print(c.get_eroded_vol())
-#print(c.get_base_grains())
-print(c.get_cross_sectional_area())
 
-print("Pyramid:")
-c = shapes.Pyramid(1, 3)
-c.set_base_height(3)
-#print(c.get_eroded_vol())
-#print(c.get_base_grains())
-print(c.get_eroding_surface_area())
-print(c.get_cross_sectional_area())
-
-print("Cylinder:")
-r = (1/math.pi)**.5
-c = shapes.Cylinder(r, 1)
-c.set_base_height(1)
-#print(c.get_eroded_vol())
-#print(c.get_base_grains())
-print(c.get_cross_sectional_area())
-
-print("Cone:")
-r = (3/math.pi)**.5
-c = shapes.Cone(r, 1)
-c.set_base_height(1)
-#print(c.get_eroded_vol())
-#print(c.get_base_grains())
-print(c.get_eroding_surface_area())
-print(c.get_cross_sectional_area())
-'''
 
 #Erodes the shape object with a wave
 def erode_shape(shape, wave):
@@ -168,7 +140,7 @@ def standing_after_erosion(shape, wave) -> bool:
 '''
 Loop for testing castle configurations
 '''
-'''
+
 #Cube loop
 #make an empty array to hold results
 cube_array = list()
@@ -197,9 +169,9 @@ for s in range(1, 2):
                     t = (wave_hits, cube, w)
                     cube_array.append(t)
 print("Size of cube_array: " + str(len(cube_array)))
-'''
 
-'''
+
+
 #Cylinder loop
 #make an empty array to hold stuff
 cylinder_array = list()
@@ -229,10 +201,10 @@ for r in range(1, 11):
                     t = (wave_hits, cylinder, w)
                     cylinder_array.append(t)
 print("Size of cylinder_array: " + str(len(cylinder_array)))
-'''
 
 
-'''
+
+
 #Pyramid loop
 #make an empty array to hold stuff
 pyramid_array = list()
@@ -262,10 +234,10 @@ for l in range(1, 11):
                     t = (wave_hits, pyramid, w)
                     pyramid_array.append(t)
 print("Size of pyramid_array: " + str(len(pyramid_array)))
-'''
 
 
-'''
+
+
 #Cone loop
 #make an empty array to hold stuff
 cone_array = list()
@@ -295,5 +267,5 @@ for r in range(1, 11):
                     t = (wave_hits, cone, w)
                     cone_array.append(t)
 print("Size of cone_array: " + str(len(cone_array)))
-'''
+
 

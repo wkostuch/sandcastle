@@ -5,6 +5,8 @@ CONSTANTS
 '''
 GRAVITY = 9.81 # m / s^2
 WATER_DENSITY = 1023.6 # kg / m^3
+AVG_WAVE_HEIGHT = 0.02 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
+AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 # meters 
 
 
 #Wave class for packaging data and any methods we may need

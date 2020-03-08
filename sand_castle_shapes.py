@@ -11,6 +11,8 @@ SAND_RADIUS = SAND_DIAMETER / 2 #meters
 SAND_VOLUME = (4/3) * math.pi * (SAND_RADIUS**3)
 WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
+AVG_WAVE_HEIGHT = 0.02 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
+AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 # meters 
 #Friendly reminder that N = (kg * m) / s^2
 
 '''
@@ -28,6 +30,9 @@ class Cube:
     #      base_side_length is the length of the side of the base being eroded (updated over time)
     #      base_height is the height of the Cube that is being hit by the wave (same as wave height)
     
+    #to_string method for pretty printing
+    def __str__(self):
+        return ""
 
     #Constructor for Cubes
     def __init__(self, side: float):
