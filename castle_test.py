@@ -2,6 +2,7 @@ import math
 import sand_castle_shapes as shapes
 import wave as waves
 import numpy as np
+import calculations as calc
 
 
 '''
@@ -13,6 +14,7 @@ SAND_RADIUS = SAND_DIAMETER / 2 #meters
 SAND_VOLUME = (4/3) * math.pi * (SAND_RADIUS**3)
 WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
+Z = 6 #max bond number for sand grains with water
 #Friendly reminder that N = (kg * m) / s^2
 
 #NOTE:
@@ -24,6 +26,7 @@ GRAVITY = 9.81 # m / s^2
 #   
 #   
 
+'''
 print("Cube:")
 c = shapes.Cube(1)
 c.set_base_height(.5)
@@ -55,7 +58,7 @@ c.set_base_height(1)
 #print(c.get_base_grains())
 print(c.get_eroding_surface_area())
 print(c.get_cross_sectional_area())
-
+'''
 
 #Erodes the shape object with a wave
 def erode_shape(shape, wave):
@@ -76,11 +79,11 @@ def erode_shape(shape, wave):
 
 #calculates the number of grains washed away
 def num_grains_eroded(shape, wave) -> int:
-    #NOTE: update this once cohesion force is known
     #cohesion_multiplier is how many times more powerful the wave is than the forces holding the sand particles together
-    wave_force = wave.wave_strength()
-    ''' NEED SAND BOND STRENGTH'''
-    cohesion_multiplier = 0 
+    wave_force = wave_force_on_shape(shape, wave) / shape.get_cross_sectional_area()
+    global Z
+    cohesion = calc.cohesion(Z)
+    cohesion_multiplier = wave_force / cohesion
     #Round to an int so that if it's below the required force to break sand-bonds then the product is 0 and no sand is removed
     sand_removed = wave.wave_height * wave.wave_distance_past_castle * int(cohesion_multiplier)
     return sand_removed
@@ -103,7 +106,7 @@ def grains_to_meters(n: float) -> float:
 # or if the base has become too eroded to support the top of the castle
 def castle_still_standing(shape, wave) -> bool:
     #NOTE: split out obliteration and base-collapse into two separate predicate methods
-    return False
+    return standing_after_wave_hit(shape, wave) #and standing_after_erosion(shape, wave)
 
 #returns the force of a wave as applied to a shape
 def wave_force_on_shape(shape, wave) -> float:
@@ -112,6 +115,15 @@ def wave_force_on_shape(shape, wave) -> float:
     wave_velocity = wave.wave_velocity
     force = WATER_DENSITY * surface_area * wave_velocity * wave_velocity
     return force
+
+#returns a boolean on if the castle is still standing after a wave hit (not erosion)
+def standing_after_wave_hit(shape, wave) -> bool:
+    global Z
+    max_shear_strength = calc.maximum_shear_strength(shape, wave, Z)
+    wave_force = wave_force_on_shape(shape, wave)
+    #calculate wave shear
+    wave_shear = wave_force / shape.get_cross_sectional_area()
+    return wave_shear < max_shear_strength
 
 
 
