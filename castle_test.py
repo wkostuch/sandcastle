@@ -176,7 +176,7 @@ Loop for testing castle configurations
 
 
 INC = 5 + 1 #How many times to loop through wave values
-R = 101 #How many times to build a shape and hit it with waves
+R = 11 #How many times to build a shape and hit it with waves
 
 #Wave height:
 START_HEIGHT = AVG_WAVE_HEIGHT * .9
@@ -230,14 +230,21 @@ for s in range(1, 2):
                 cube.set_base_height(w.wave_height)
                 #now commence the testing!
                 wave_hits = 0
-                while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
+                while cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cube, w):
                     wave_hits +=1
                     erode_shape(cube, w)
                     #print("base_radius: " + str(cube.base_radius))
-                #print("Took " + str(wave_hits) + " to knock this cube over!")
-                #now add the results to the results_array
                 t = (wave_hits, cube, w)
                 cube_array.append(t)
+                #update dictionary
+                if cube.base_radius <= 0: 
+                    erosion_dict[cube.string_name()] = erosion_dict[cube.string_name()] + 1
+                    continue
+                elif wave_hits >= MAX_WAVE_HITS:  did_not_fall_dict[cube.string_name()] = did_not_fall_dict[cube.string_name()] + 1
+                
+                #print("Took " + str(wave_hits) + " to knock this cube over!")
+                #now add the results to the results_array
+
 print("Size of cube_array: " + str(len(cube_array)))
 
 
@@ -266,14 +273,20 @@ for r in range(1, R):
                     cylinder.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cylinder, w) and cylinder.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
+                    while cylinder.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cylinder, w):
                         wave_hits +=1
                         #print("base_radius: " + str(cylinder.base_radius))
                         erode_shape(cylinder, w)
-                    #now add the results to the results_array
-                    #print("Took " + str(wave_hits) + " to knock this cylinder over!")
                     t = (wave_hits, cylinder, w)
                     cylinder_array.append(t)
+                    #update dictionary
+                    if cylinder.base_radius <= 0:
+                        erosion_dict[cylinder.string_name()] = erosion_dict[cylinder.string_name()] + 1
+                        continue
+                    elif wave_hits >= MAX_WAVE_HITS: did_not_fall_dict[cylinder.string_name()] = did_not_fall_dict[cylinder.string_name()] + 1
+                    #now add the results to the results_array
+                    #print("Took " + str(wave_hits) + " to knock this cylinder over!")
+
 
 print("Size of cylinder_array: " + str(len(cylinder_array)))
 
@@ -304,14 +317,22 @@ for l in range(1, 11):
                     w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(pyramid, w) and pyramid.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
+                    while pyramid.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(pyramid, w):
                         wave_hits +=1
                         #print("base_radius: " + str(pyramid.base_radius))
                         erode_shape(pyramid, w)
-                    #now add the results to the results_array
-                    #print("Took " + str(wave_hits) + " to knock this pyramid over!")
                     t = (wave_hits, pyramid, w)
                     pyramid_array.append(t)
+                    #update dict
+                    if pyramid.base_radius <= 0: 
+                        erosion_dict[pyramid.string_name()] = erosion_dict[pyramid.string_name()] + 1
+                        continue
+                    elif wave_hits >= MAX_WAVE_HITS: did_not_fall_dict[pyramid.string_name()] = did_not_fall_dict[pyramid.string_name()] + 1
+                        
+
+                    #now add the results to the results_array
+                    #print("Took " + str(wave_hits) + " to knock this pyramid over!")
+
 print("Size of pyramid_array: " + str(len(pyramid_array)))
 
 
@@ -346,16 +367,21 @@ for i in range(1, R):
                     
                     #now commence the testing!
                     wave_hits = 0
-                    while castle_still_standing(cone, w) and cone.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
+                    while cone.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cone, w):
                         wave_hits +=1
                         erode_shape(cone, w)
-
+                    t = (wave_hits, cone, w)
+                    cone_array.append(t)
+                    #Update dict
+                    if cone.base_radius <= 0: 
+                        erosion_dict[cone.string_name()] = erosion_dict[cone.string_name()] + 1
+                        continue
+                    elif wave_hits >= MAX_WAVE_HITS: did_not_fall_dict[cone.string_name()] = did_not_fall_dict[cone.string_name()] + 1
                     #now add the results to the results_array
                     #print(str(cone))
                     #print("Took " + str(wave_hits) + " to knock this cone over!")
                     #print(str(w))
-                    t = (wave_hits, cone, w)
-                    cone_array.append(t)
+
 print("Size of cone_array: " + str(len(cone_array)))
 
 
@@ -371,13 +397,16 @@ def average_wave_hits(shape_array) -> float:
     return (sum / len(shape_array))
 
 
-
+print("\n")
 print("Cube average: "  + str(average_wave_hits(cube_array)))
 print("Cylinder average: " + str(average_wave_hits(cylinder_array)))
 print("Pyramid average: " + str(average_wave_hits(pyramid_array)))
 print("Cone average: " + str(average_wave_hits(cone_array)))
+print("\n")
 
 print("Erosion stats: " + str(erosion_dict))
 print("Knockout stats: " + str(knockout_dict))
+print("Still-standing stats: " + str(did_not_fall_dict))
+print("\n")
 
 
