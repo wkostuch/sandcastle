@@ -146,10 +146,10 @@ START_RADIUS: MIN_CASTLE_RADIUS * 10
 END_RADIUS: MAX_CASTLE_RADIUS * 10
 #Wave height:
 START_HEIGHT = int(AVG_WAVE_HEIGHT * 100 *.85)
-END_HEIGHT = int(AVG_WAVE_HEIGHT * 100 * 1.15)
+END_HEIGHT = int(AVG_WAVE_HEIGHT * 100 * 1.15) * 10
 #Wave break depth:
 START_DEPTH = int(AVG_BREAK_DEPTH * 100 * .85)
-END_DEPTH = int(AVG_BREAK_DEPTH * 100 *1.15)
+END_DEPTH = int(AVG_BREAK_DEPTH * 100 *1.15) * 10
 #Distance past the castle in meters
 START_DISTANCE = 0
 END_DISTANCE = 5
@@ -161,10 +161,10 @@ cube_array = list()
 #only one way to have a volume of 1 m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
-    for h in range(START_HEIGHT, END_HEIGHT*10, 1):
+    for h in range(START_HEIGHT, END_HEIGHT, 1):
         #now vary depth for wave break
         #print(h)
-        for d in range(START_DEPTH, END_DEPTH*10, 1):
+        for d in range(START_DEPTH, END_DEPTH, 1):
             #now vary distance past the sandcastle
             #print(d)
             for dist in range(START_DISTANCE, END_DISTANCE, 1):
@@ -188,7 +188,7 @@ for s in range(1, 2):
 print("Size of cube_array: " + str(len(cube_array)))
 
 
-'''
+
 #Cylinder loop
 #make an empty array to hold stuff
 cylinder_array = list()
@@ -285,4 +285,4 @@ for r in range(1, 11):
                     cone_array.append(t)
 print("Size of cone_array: " + str(len(cone_array)))
 
-'''
+
