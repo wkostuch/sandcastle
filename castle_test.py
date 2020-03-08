@@ -140,6 +140,20 @@ def standing_after_erosion(shape, wave) -> bool:
 '''
 Loop for testing castle configurations
 '''
+#Stuff for the loopsies
+#Radii for the non-cube castles:
+START_RADIUS: MIN_CASTLE_RADIUS * 10
+END_RADIUS: MAX_CASTLE_RADIUS * 10
+#Wave height:
+START_HEIGHT = int(AVG_WAVE_HEIGHT * 100 *.85)
+END_HEIGHT = int(AVG_WAVE_HEIGHT * 100 * 1.15)
+#Wave break depth:
+START_DEPTH = int(AVG_BREAK_DEPTH * 100 * .85)
+END_DEPTH = int(AVG_BREAK_DEPTH * 100 *1.15)
+#Distance past the castle in meters
+START_DISTANCE = 0
+END_DISTANCE = 5
+
 
 #Cube loop
 #make an empty array to hold results
@@ -147,31 +161,34 @@ cube_array = list()
 #only one way to have a volume of 1 m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
-    for h in range(1, 11, 1):
+    for h in range(START_HEIGHT, END_HEIGHT*10, 1):
         #now vary depth for wave break
-            for d in range(1, 5, 1):
-                #now vary distance past the sandcastle
-                for dist in range(0, 10, 1):
-                    #Make a shape and a wave
-                    side_length = VOL**(1/3)
-                    cube = shapes.Cube(side_length)
-                    #print(cube.side_length)
-                    w = waves.Wave(h/100, d/5, dist/10)
-                    cube.set_base_height(w.wave_height)
-                    #now commence the testing!
-                    wave_hits = 0
-                    while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
-                        wave_hits +=1
-                        erode_shape(cube, w)
-                        #print("base_radius: " + str(cube.base_radius))
-                    print("Took " + str(wave_hits) + " to knock this cube over!")
-                    #now add the results to the results_array
-                    t = (wave_hits, cube, w)
-                    cube_array.append(t)
+        #print(h)
+        for d in range(START_DEPTH, END_DEPTH*10, 1):
+            #now vary distance past the sandcastle
+            #print(d)
+            for dist in range(START_DISTANCE, END_DISTANCE, 1):
+                #print(dist)
+                #Make a shape and a wave
+                side_length = VOL**(1/3)
+                cube = shapes.Cube(side_length)
+                #print(cube.side_length)
+                w = waves.Wave(h/100, d/100, dist)
+                cube.set_base_height(w.wave_height)
+                #now commence the testing!
+                wave_hits = 0
+                while castle_still_standing(cube, w) and cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
+                    wave_hits +=1
+                    erode_shape(cube, w)
+                    #print("base_radius: " + str(cube.base_radius))
+                print("Took " + str(wave_hits) + " to knock this cube over!")
+                #now add the results to the results_array
+                t = (wave_hits, cube, w)
+                cube_array.append(t)
 print("Size of cube_array: " + str(len(cube_array)))
 
 
-
+'''
 #Cylinder loop
 #make an empty array to hold stuff
 cylinder_array = list()
@@ -268,4 +285,4 @@ for r in range(1, 11):
                     cone_array.append(t)
 print("Size of cone_array: " + str(len(cone_array)))
 
-
+'''
