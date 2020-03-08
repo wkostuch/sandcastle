@@ -15,6 +15,7 @@ SAND_VOLUME = (4/3) * math.pi * (SAND_RADIUS**3)
 WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
 Z = 6 #max bond number for sand grains with water
+VOL = 0.3 #constant for the volume of sand we're using
 #Friendly reminder that N = (kg * m) / s^2
 
 #NOTE:
@@ -106,13 +107,14 @@ def grains_to_meters(n: float) -> float:
 # or if the base has become too eroded to support the top of the castle
 def castle_still_standing(shape, wave) -> bool:
     #NOTE: split out obliteration and base-collapse into two separate predicate methods
-    return standing_after_wave_hit(shape, wave) #and standing_after_erosion(shape, wave)
+    #return standing_after_wave_hit(shape, wave) #and standing_after_erosion(shape, wave)
+    return False
 
 #returns the force of a wave as applied to a shape
 def wave_force_on_shape(shape, wave) -> float:
     global WATER_DENSITY
     surface_area = shape.get_eroding_surface_area()
-    wave_velocity = wave.wave_velocity
+    wave_velocity = wave.wave_speed
     force = WATER_DENSITY * surface_area * wave_velocity * wave_velocity
     return force
 
@@ -139,7 +141,7 @@ cube_array = list()
 #only one way to have a volume of 1 m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
-    for h in range(0, 10, 1):
+    for h in range(1, 11, 1):
         #now vary depth for wave break
             for d in range(1, 5, 1):
                 #now vary distance past the sandcastle
@@ -171,7 +173,7 @@ for r in range(1, 11):
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
                     rad = (r / 10.0) + 0.00001 #Adding this to keep form dividing by zero
-                    height = 1 / (math.pi * rad * rad)
+                    height = VOL / (math.pi * rad * rad)
                     #print("r: " + str(rad) + " | h: " + str(height))
                     cylinder = shapes.Cylinder(rad, height)
                     w = waves.Wave(h/100, d/5, dist/10)
@@ -200,7 +202,7 @@ for l in range(1, 11):
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
                     length = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
-                    height = 3 / (length * length)
+                    height = (3 * VOL) / (length * length)
                     pyramid = shapes.Pyramid(length, height)
                     w = waves.Wave(h/100, d/5, dist/10)
                     #pyramid.set_base_height(w.wave_height)
@@ -228,7 +230,7 @@ for r in range(1, 11):
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
                     rad = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
-                    height = 3 / (math.pi * rad * rad)
+                    height = (3 * VOL) / (math.pi * rad * rad)
                     cone = shapes.Cone(rad, h)
                     w = waves.Wave(h/100, d/5, dist/10)
                     cone.set_base_height(w.wave_height)
