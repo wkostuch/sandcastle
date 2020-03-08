@@ -115,7 +115,7 @@ def standing_after_wave_hit(shape, wave) -> bool:
     if wave_shear < max_shear_strength:
         return True
     else:
-        print("Knocked over by a wave")
+        #print("Knocked over by a wave")
         return False
 
 #returns a boolean on if the castle is still standing after being eroded
@@ -132,13 +132,13 @@ def standing_after_erosion(shape, wave) -> bool:
     #From the Nature article
     crit_height = (( (9 * J * J) / 16) \
                   * ( (G * r * r) / (SAND_DENSITY * GRAVITY)))**(1/3)
-    print("Critical height: " + str(crit_height))
-    print("Actual height: " + str(shape.height))
+    #print("Critical height: " + str(crit_height))
+    #print("Actual height: " + str(shape.height))
     #return shape.height <= crit_height
     if shape.height <= crit_height:
         return True
     else:
-        print("Collapsed due to erosion")
+        #print("Collapsed due to erosion")
         return False
 
 
@@ -146,25 +146,35 @@ def standing_after_erosion(shape, wave) -> bool:
 Loop for testing castle configurations
 '''
 #Stuff for the loopsies
-#Radii for the non-cube castles:
 
-START_RADIUS = int(MIN_CASTLE_RADIUS * 10)
-END_RADIUS = int(MAX_CASTLE_RADIUS * 10)
 
-START_SHAPE_HEIGHT = int(MIN_CASTLE_HEIGHT * 100)
-END_SHAPE_HEIGHT = int(MAX_CASTLE_HEIGHT * 100)
+INC = 5 + 1 #How many times to loop through wave values
+R = 1001 #How many times to build a shape and hit it with waves
 
 #Wave height:
-START_HEIGHT = int(AVG_WAVE_HEIGHT * 100 *.85)
-END_HEIGHT = int(AVG_WAVE_HEIGHT * 100 * 1.15) * 10
-print(START_HEIGHT)
-print(END_HEIGHT)
+START_HEIGHT = AVG_WAVE_HEIGHT * .9
+END_HEIGHT = AVG_WAVE_HEIGHT * 1.11 
+HEIGHT_INCREMENT = (END_HEIGHT - START_HEIGHT) / INC
+print(str(END_HEIGHT - START_HEIGHT))
+
 #Wave break depth:
-START_DEPTH = int(AVG_BREAK_DEPTH * 100 * .85)
-END_DEPTH = int(AVG_BREAK_DEPTH * 100 *1.15) * 10
+START_DEPTH = AVG_BREAK_DEPTH  * .9
+END_DEPTH = AVG_BREAK_DEPTH * 1.1 
+DEPTH_INCREMENT = (END_DEPTH - START_DEPTH) / INC
 #Distance past the castle in meters
 START_DISTANCE = 0
-END_DISTANCE = 200
+END_DISTANCE = 20 #These get divided by 10 in the loops
+DIST_INCREMENT = (END_DISTANCE - START_DISTANCE) / INC
+
+
+#Set stuff up for the loops based off of the cube
+cube_length = VOL**(1/3)
+SHAPE_HEIGHT = cube_length
+START_SHAPE_HEIGHT = .9 * SHAPE_HEIGHT
+END_SHAPE_HEIGHT = 1.1 * SHAPE_HEIGHT 
+INCREMENT = (END_SHAPE_HEIGHT - START_SHAPE_HEIGHT) / (R-1)
+
+
 
 
 #Cube loop
@@ -173,19 +183,24 @@ cube_array = list()
 #only one way to have a volume of 1 m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
-    for h in range(START_HEIGHT, END_HEIGHT, 1):
+    for h in range(1, INC):
         #now vary depth for wave break
-        #print(h)
-        for d in range(START_DEPTH, END_DEPTH, 1):
+        for d in range(1, INC):
             #now vary distance past the sandcastle
             #print(d)
-            for dist in range(START_DISTANCE, END_DISTANCE, 1):
-                #print(dist)
+            for dist in range(1, INC):
                 #Make a shape and a wave
                 side_length = VOL**(1/3)
                 cube = shapes.Cube(side_length)
                 #print(cube.side_length)
-                w = waves.Wave(h/100, d/100, dist)
+                #Increment the wave values
+                wave_HEIGHT= (h * HEIGHT_INCREMENT) + START_HEIGHT
+                wave_DEPTH = (d * DEPTH_INCREMENT) + START_DEPTH
+                wave_DIST = (dist * DIST_INCREMENT) + START_DISTANCE
+
+                #make the wave
+                w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
+                #Set the cube base_height
                 cube.set_base_height(w.wave_height)
                 #now commence the testing!
                 wave_hits = 0
@@ -204,19 +219,24 @@ print("Size of cube_array: " + str(len(cube_array)))
 #make an empty array to hold stuff
 cylinder_array = list()
 #time to permute our stuff
-for r in range(START_SHAPE_HEIGHT, END_SHAPE_HEIGHT):
+for r in range(1, R):
     #Make waves one cm at a time
-    for h in range(START_HEIGHT, END_HEIGHT, 1):
+    for h in range(1, INC):
         #now vary depth for wave break
-            for d in range(START_DEPTH, END_DEPTH, 1):
+            for d in range(1, INC):
                 #now vary distance past the sandcastle
-                for dist in range(START_DISTANCE, END_DISTANCE, 1):
+                for dist in range(1, INC):
                     #Make a shape and a wave
                     height = (r / 100.0) + 0.00001 #Adding this to keep form dividing by zero
                     rad = math.sqrt((VOL) / (math.pi * height))
-                    #print("r: " + str(rad) + " | h: " + str(height))
                     cylinder = shapes.Cylinder(rad, height)
-                    w = waves.Wave(h/100, d/100, dist)
+                    #Increment the wave values
+                    wave_HEIGHT= (h * HEIGHT_INCREMENT) + START_HEIGHT
+                    wave_DEPTH = (d * DEPTH_INCREMENT) + START_DEPTH
+                    wave_DIST = (dist * DIST_INCREMENT) + START_DISTANCE
+
+                    #make the wave
+                    w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
                     cylinder.set_base_height(w.wave_height)
                     #now commence the testing!
                     wave_hits = 0
@@ -228,31 +248,34 @@ for r in range(START_SHAPE_HEIGHT, END_SHAPE_HEIGHT):
                     #print("Took " + str(wave_hits) + " to knock this cylinder over!")
                     t = (wave_hits, cylinder, w)
                     cylinder_array.append(t)
-    if len(cylinder_array) > 5000:
-        break
+
 print("Size of cylinder_array: " + str(len(cylinder_array)))
 
 
 
-'''
+
 #Pyramid loop
 #make an empty array to hold stuff
 pyramid_array = list()
 #time to permute our stuff
 for l in range(1, 11):
     #Make waves one cm at a time
-    for h in range(START_HEIGHT, END_HEIGHT, 1):
+    for h in range(1, INC):
         #now vary depth for wave break
-            for d in range(START_DEPTH, END_DEPTH, 1):
+            for d in range(1, INC):
                 #now vary distance past the sandcastle
-                for dist in range(START_DISTANCE, END_DISTANCE, 1):
+                for dist in range(1, INC):
                     #Make a shape and a wave
                     length = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
                     height = (3 * VOL) / (length * length)
                     pyramid = shapes.Pyramid(length, height)
-                    w = waves.Wave(h/100, d/100, dist)
-                    #pyramid.set_base_height(w.wave_height)
-                    #print("length: " + str(length) + " | h: " + str(height))
+                    #Increment the wave values
+                    wave_HEIGHT= (h * HEIGHT_INCREMENT) + START_HEIGHT
+                    wave_DEPTH = (d * DEPTH_INCREMENT) + START_DEPTH
+                    wave_DIST = (dist * DIST_INCREMENT) + START_DISTANCE
+
+                    #make the wave
+                    w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
                     #now commence the testing!
                     wave_hits = 0
                     while castle_still_standing(pyramid, w) and pyramid.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
@@ -264,7 +287,7 @@ for l in range(1, 11):
                     t = (wave_hits, pyramid, w)
                     pyramid_array.append(t)
 print("Size of pyramid_array: " + str(len(pyramid_array)))
-'''
+
 
 
 
@@ -272,32 +295,39 @@ print("Size of pyramid_array: " + str(len(pyramid_array)))
 #make an empty array to hold stuff
 cone_array = list()
 #time to permute our stuff
-for r in range(START_SHAPE_HEIGHT, END_SHAPE_HEIGHT):
+for i in range(1, R):
     #Make waves one cm at a time
-    for h in range(START_HEIGHT, END_HEIGHT, 1):
+    for h in range(1, INC):
         #now vary depth for wave break
-            for d in range(START_DEPTH, END_DEPTH, 1):
+            for d in range(1, INC):
                 #now vary distance past the sandcastle
-                for dist in range(START_DISTANCE, END_DISTANCE, 1):
+                for dist in range(1, INC):
                     #Make a shape and a wave
-                    height = (r / 100) + 0.00001 #Adding this to keep form dividing by zero
+                    #Increment height and get the radius from that
+                    height = (i * INCREMENT) + START_SHAPE_HEIGHT
                     rad = math.sqrt((3 * VOL) / (math.pi * height))
+                    #build the shape
+                    cone = shapes.Cone(rad, height)
+                    #Increment the wave values
+                    wave_HEIGHT= (h * HEIGHT_INCREMENT) + START_HEIGHT
+                    wave_DEPTH = (d * DEPTH_INCREMENT) + START_DEPTH
+                    wave_DIST = (dist * DIST_INCREMENT) + START_DISTANCE
 
-                    cone = shapes.Cone(rad, h)
-                    w = waves.Wave(h/100, d/100, dist/100)
+                    #make the wave
+                    w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
+                    #Set the cone's base_height field
                     cone.set_base_height(w.wave_height)
-                    #print("r: " + str(rad) + " | h: " + str(height))
+                    
                     #now commence the testing!
                     wave_hits = 0
                     while castle_still_standing(cone, w) and cone.base_radius > 0 and wave_hits < MAX_WAVE_HITS:
                         wave_hits +=1
-
                         erode_shape(cone, w)
 
                     #now add the results to the results_array
-                    print(str(cone))
-                    print("Took " + str(wave_hits) + " to knock this cone over!")
-                    print(str(w))
+                    #print(str(cone))
+                    #print("Took " + str(wave_hits) + " to knock this cone over!")
+                    #print(str(w))
                     t = (wave_hits, cone, w)
                     cone_array.append(t)
 print("Size of cone_array: " + str(len(cone_array)))
@@ -316,7 +346,9 @@ def average_wave_hits(shape_array) -> float:
 
 
 
-
-print(average_wave_hits(cone_array))
 print(average_wave_hits(cube_array))
 print(average_wave_hits(cylinder_array))
+print(average_wave_hits(pyramid_array))
+print(average_wave_hits(cone_array))
+
+
