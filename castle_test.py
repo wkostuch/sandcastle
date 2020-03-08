@@ -17,7 +17,7 @@ WATER_DENSITY = 1023.6 # kg / m^3
 GRAVITY = 9.81 # m / s^2
 Z = 6 #max bond number for sand grains with water
 J = 1.8663 #Bessel function number
-E = 30 * 1000000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
+E = 30 * 1000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
 ALPHA = 0.054
 GAMMA = 70
 MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hits then we move on to the next one
@@ -106,7 +106,9 @@ def wave_force_on_shape(shape, wave) -> float:
 def standing_after_wave_hit(shape, wave) -> bool:
     global Z
     max_shear_strength = calc.maximum_shear_strength(shape, wave, Z)
+    #print("Shear strength: " + str(max_shear_strength))
     wave_force = wave_force_on_shape(shape, wave)
+    #print("Wave force: " + str(wave_force))
     #calculate wave shear
     wave_shear = wave_force / shape.get_cross_sectional_area()
     #return wave_shear < max_shear_strength
@@ -132,14 +134,12 @@ def standing_after_erosion(shape, wave) -> bool:
     #From the Nature article
     crit_height = (( (9 * J * J) / 16) \
                   * ( (G * r * r) / (SAND_DENSITY * GRAVITY)))**(1/3)
-    #print("Critical height: " + str(crit_height))
-    #print("Actual height: " + str(shape.height))
-    #return shape.height <= crit_height
-    if shape.height <= crit_height:
-        return True
-    else:
-        #print("Collapsed due to erosion")
-        return False
+    #Now check each shape:
+    if type(shape) is shapes.Cylinder or type(shape) is shapes.Cube:
+        return shape.height <= crit_height
+    elif type(shape) is shapes.Cone or type(shape) is shapes.Pyramid:
+        return shape.height <= 3 * crit_height
+        #Multiply by 3 since the volume of a cone/pyramid is 1/3 the volume of a cylinder/cube
 
 
 '''
@@ -149,11 +149,11 @@ Loop for testing castle configurations
 
 
 INC = 5 + 1 #How many times to loop through wave values
-R = 1001 #How many times to build a shape and hit it with waves
+R = 101 #How many times to build a shape and hit it with waves
 
 #Wave height:
 START_HEIGHT = AVG_WAVE_HEIGHT * .9
-END_HEIGHT = AVG_WAVE_HEIGHT * 1.11 
+END_HEIGHT = AVG_WAVE_HEIGHT * 1.1
 HEIGHT_INCREMENT = (END_HEIGHT - START_HEIGHT) / INC
 print(str(END_HEIGHT - START_HEIGHT))
 
@@ -163,7 +163,7 @@ END_DEPTH = AVG_BREAK_DEPTH * 1.1
 DEPTH_INCREMENT = (END_DEPTH - START_DEPTH) / INC
 #Distance past the castle in meters
 START_DISTANCE = 0
-END_DISTANCE = 20 #These get divided by 10 in the loops
+END_DISTANCE = 20 
 DIST_INCREMENT = (END_DISTANCE - START_DISTANCE) / INC
 
 

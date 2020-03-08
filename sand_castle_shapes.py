@@ -368,8 +368,8 @@ class Cone:
     def get_radius_at_base_height(self) -> float:
         #h is the height of the imaginary cone extending from the truncated cone that is the 
         # base being eroded; use the base_height_ratio to keep it consistent
-        h = self.height_radius_ratio * self.base_radius #use the original height to radius ratio to find the height of the imaginary cone
-        r = self.get_radius_at_h(self.base_radius, h)
+        #h = self.height_radius_ratio * self.base_radius #use the original height to radius ratio to find the height of the imaginary cone
+        r = self.get_radius_at_h(self.base_radius, self.base_height)
         return r
 
     #returns the radius of the Cone at height h
