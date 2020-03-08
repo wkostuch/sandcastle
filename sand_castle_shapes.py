@@ -350,7 +350,7 @@ class Cone:
     #returns the radius of the Cone at height h
     #NOTE that base_radius is not self here, it varies 
     def get_radius_at_h(self, base_radius: float, h: float) -> float:
-        triangle_adj = h / math.tan(self.angle)
+        triangle_adj = h / (math.tan(self.angle) + 0.000001) #add a little to not divide by 0
         return base_radius - triangle_adj
 
 

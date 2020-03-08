@@ -158,10 +158,10 @@ for r in range(1, 11):
                 #now vary distance past the sandcastle
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
-                    r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
-                    height = 1 / (math.pi * r * r)
-                    print("r: " + str(r) + " | h: " + str(height))
-                    cylinder = shapes.Cylinder(r, height)
+                    rad = (r / 10.0) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 1 / (math.pi * rad * rad)
+                    #print("r: " + str(rad) + " | h: " + str(height))
+                    cylinder = shapes.Cylinder(rad, height)
                     w = waves.Wave(h/100, d/5, dist/10)
                     cylinder.set_base_height(w.wave_height)
                     #now commence the testing!
@@ -187,11 +187,12 @@ for l in range(1, 11):
                 #now vary distance past the sandcastle
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
-                    l = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
-                    height = 3 / (l * l)
-                    pyramid = shapes.Pyramid(l, height)
+                    length = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 3 / (length * length)
+                    pyramid = shapes.Pyramid(length, height)
                     w = waves.Wave(h/100, d/5, dist/10)
-                    pyramid.set_base_height(w.wave_height)
+                    #pyramid.set_base_height(w.wave_height)
+                    print("length: " + str(length) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
                     while castle_still_standing(pyramid, w):
@@ -214,11 +215,12 @@ for r in range(1, 11):
                 #now vary distance past the sandcastle
                 for dist in range(0, 10, 1):
                     #Make a shape and a wave
-                    r = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
-                    h = 3 / (math.pi * r * r)
-                    cone = shapes.Cone(r, h)
+                    rad = (r / 10) + 0.00001 #Adding this to keep form dividing by zero
+                    height = 3 / (math.pi * rad * rad)
+                    cone = shapes.Cone(rad, h)
                     w = waves.Wave(h/100, d/5, dist/10)
                     cone.set_base_height(w.wave_height)
+                    #print("r: " + str(rad) + " | h: " + str(height))
                     #now commence the testing!
                     wave_hits = 0
                     while castle_still_standing(cone, w):
