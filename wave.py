@@ -31,3 +31,10 @@ class Wave:
     def wave_strength(self) -> float:
         global WATER_DENSITY
         momentum = WATER_DENSITY * self.wave_height * self.wave_speed
+
+    #to string:
+    def __str__(self):
+        s = "Wave Height: " + str(self.wave_height) + \
+            " | Wave Speed: " + str(self.wave_speed) + \
+            " | Wave Distance: " + str(self.wave_distance_past_castle)
+        return s
