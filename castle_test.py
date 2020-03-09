@@ -11,9 +11,10 @@ CONSTANTS for use in the file
 '''
 #Vary these as desired
 VOL = 0.08 # m^3 | constant for the volume of sand we're using
-WAVE_MULTIPLIER = 1 #how many time to bump the variable of the wave up
+WAVE_MULTIPLIER = 1.7 #how many time to bump the variable of the wave up
 INC = 5 + 1 #How many times to loop through wave values
 R = 101 #How many times to build a shape and hit it with waves
+RAIN_MULTIPLIER = 1.0 #How much rain we're getting
 
 
 #These should stay the same
@@ -31,6 +32,11 @@ GAMMA = 70
 MAX_WAVE_HITS = 1000 #used in the test loops, if the castle survives this many hits then we move on to the next one
 AVG_WAVE_HEIGHT = 0.05 * WAVE_MULTIPLIER # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
 AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 * WAVE_MULTIPLIER # meters 
+AVG_RAINFALL = 0.00508 * RAIN_MULTIPLIER #rainfall in m / hour
+TIME_PER_WAVE = 5.0 # seconds 
+AVG_RAINFALL_PER_WAVE = AVG_RAINFALL * (1/60) * (1/60) * TIME_PER_WAVE #rainfall from m/hr to m/wave_time
+INITIAL_SATURATION = 0.06 #initial saturation at 6%
+OVERSATURATED = .15 #water to sand vol for 
 
 MIN_CASTLE_RADIUS = 0.10 # meters
 MAX_CASTLE_RADIUS = 0.40 # meters
@@ -41,12 +47,14 @@ MAX_CASTLE_HEIGHT = 1
 erosion_dict = dict()
 knockout_dict = dict()
 did_not_fall_dict = dict()
+fell_from_rain_dict = dict()
 #Put stuff in the dictionaries 
 shape_list = ["cube", "cylinder", "pyramid", "cone"]
 for s in shape_list:
     erosion_dict[s] = 0
     knockout_dict[s] = 0
     did_not_fall_dict[s] = 0
+    fell_from_rain_dict[s] = 0
 
 
 #Friendly reminder that N = (kg * m) / s^2
@@ -173,6 +181,12 @@ def standing_after_erosion(shape, wave) -> bool:
             val = erosion_dict[s]
             erosion_dict[s] = val + 1
             return False
+
+    #returns true if the shape is not-yet over-saturated
+    #false if 
+    def top_saturation(shape) -> float:
+        return True
+
 
 
 
