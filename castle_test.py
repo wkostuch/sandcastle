@@ -11,9 +11,9 @@ CONSTANTS for use in the file
 '''
 #Vary these as desired
 VOL = 0.08 # m^3 | constant for the volume of sand we're using
-WAVE_MULTIPLIER = 1.7 #how many time to bump the variable of the wave up
+WAVE_MULTIPLIER = 1.0 #how many time to bump the variable of the wave up
 INC = 5 + 1 #How many times to loop through wave values
-R = 101 #How many times to build a shape and hit it with waves
+R = 11 #How many times to build a shape and hit it with waves
 RAIN_MULTIPLIER = 1.0 #How much rain we're getting
 
 
@@ -183,9 +183,34 @@ def standing_after_erosion(shape, wave) -> bool:
             erosion_dict[s] = val + 1
             return False
 
-    #returns true if the shape is not-yet over-saturated
-    #false if 
-    def top_saturation(shape) -> float:
+#saturates the shape with rain
+def rain_on_shape(shape) -> float:
+    area = 0
+    vol = 0
+    if type(shape) is shapes.Cube:
+        area = shape.side_length * shape.side_length
+        vol = area * (shape.height - shape.base_height)
+    elif type(shape) is shapes.Cylinder:
+        area = shape.get_top_area()
+        vol = area * (shape.height - shape.base_height)
+    elif type(shape) is shapes.Pyramid:
+        length = shape.get_length_at_h(shape.side_length, shape.base_height)
+        area = length * length
+        vol = shape.get_top_vol()
+    elif type(shape) is shapes.Cone:
+        r = shape.get_radius_at_h(shape.radius, shape.base_height)
+        area = r * r * math.pi
+        vol = shape.get_top_vol()
+    return (area * AVG_RAINFALL_PER_WAVE) / vol
+
+#returns true if shape is not oversaturated
+#updates dict accordingly
+def not_oversaturated(shape, current_saturation: float) -> bool:
+    if current_saturation > OVERSATURATED: #too saturated, time to fall over
+        s = shape.string_name()
+        fell_from_rain_dict[s] = fell_from_rain_dict[s] + 1
+        return False
+    else: #not yet oversaturated
         return True
 
 
@@ -247,9 +272,11 @@ for s in range(1, 2):
                 w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
                 #Set the cube base_height
                 cube.set_base_height(w.wave_height)
+                saturation = INITIAL_SATURATION
                 #now commence the testing!
                 wave_hits = 0
-                while cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cube, w):
+                while cube.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cube, w) and not_oversaturated(cube, saturation):
+                    saturation = saturation + rain_on_shape(cube) #update the saturation by raining on the shape
                     wave_hits +=1
                     erode_shape(cube, w)
                     #print("base_radius: " + str(cube.base_radius))
@@ -290,9 +317,11 @@ for i in range(1, R):
                     #make the wave
                     w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
                     cylinder.set_base_height(w.wave_height)
+                    saturation = INITIAL_SATURATION
                     #now commence the testing!
                     wave_hits = 0
-                    while cylinder.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cylinder, w):
+                    while cylinder.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cylinder, w) and not_oversaturated(cylinder, saturation):
+                        saturation = saturation + rain_on_shape(cylinder) #update the saturation by raining on the shape
                         wave_hits +=1
                         #print("base_radius: " + str(cylinder.base_radius))
                         erode_shape(cylinder, w)
@@ -334,9 +363,11 @@ for h in range(1, R):
 
                     #make the wave
                     w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
+                    saturation = INITIAL_SATURATION
                     #now commence the testing!
                     wave_hits = 0
-                    while pyramid.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(pyramid, w):
+                    while pyramid.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(pyramid, w) and not_oversaturated(pyramid, saturation):
+                        saturation = saturation + rain_on_shape(pyramid) #update the saturation by raining on the shape
                         wave_hits +=1
                         #print("base_radius: " + str(pyramid.base_radius))
                         erode_shape(pyramid, w)
@@ -383,10 +414,11 @@ for i in range(1, R):
                     w = waves.Wave(wave_HEIGHT, wave_DEPTH, wave_DIST)
                     #Set the cone's base_height field
                     cone.set_base_height(w.wave_height)
-                    
+                    saturation = INITIAL_SATURATION 
                     #now commence the testing!
                     wave_hits = 0
-                    while cone.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cone, w):
+                    while cone.base_radius > 0 and wave_hits < MAX_WAVE_HITS and castle_still_standing(cone, w) and not_oversaturated(cone, saturation):
+                        saturation = saturation + rain_on_shape(cone) #update the saturation by raining on the shape
                         wave_hits +=1
                         erode_shape(cone, w)
                     t = (wave_hits, cone, w)
@@ -425,6 +457,7 @@ print("\n")
 
 print("Erosion stats: " + str(erosion_dict))
 print("Knockout stats: " + str(knockout_dict))
+print("Rain stats: " + str(fell_from_rain_dict))
 print("Still-standing stats: " + str(did_not_fall_dict))
 print("\n")
 
