@@ -254,7 +254,17 @@ class Pyramid:
 
     #returns vol of pyramid not being eroded
     def get_top_vol(self) -> float:
-        return self.get_pyramid_vol(self.base_side_length, (self.height - self.base_height))
+        length = self.get_length_at_h(self.side_length, self.base_height)
+        height = self.height - self.base_height
+        return self.get_pyramid_vol(length, height)
+
+
+    #returns the length of the Pyramid at height h
+    #NOTE that base_length is not self here, it varies 
+    def get_length_at_h(self, base_length: float, h: float) -> float:
+        triangle_adj = h / (math.tan(self.angle) + 0.000001) #add a little to not divide by 0
+        return base_length - (2 * triangle_adj)
+        
 
     #returns vol of part of pyramid being eroded
     def get_eroded_vol(self) -> float:
