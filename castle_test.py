@@ -186,7 +186,7 @@ def standing_after_erosion(shape, wave) -> bool:
     #returns true if the shape is not-yet over-saturated
     #false if 
     def top_saturation(shape) -> float:
-        return true
+        return True
 
 
 
