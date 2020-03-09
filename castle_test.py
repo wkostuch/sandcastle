@@ -9,6 +9,14 @@ import matplotlib as plt
 '''
 CONSTANTS for use in the file
 '''
+#Vary these as desired
+VOL = 0.08 # m^3 | constant for the volume of sand we're using
+WAVE_MULTIPLIER = 1 #how many time to bump the variable of the wave up
+INC = 5 + 1 #How many times to loop through wave values
+R = 101 #How many times to build a shape and hit it with waves
+
+
+#These should stay the same
 SAND_DENSITY = 2082.0 # kg / m^3
 SAND_DIAMETER = 0.000375 # diameter in meters, aka 375 micro-meters
 SAND_RADIUS = SAND_DIAMETER / 2 #meters
@@ -20,15 +28,15 @@ J = 1.8663 #Bessel function number
 E = 30 * 1000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
 ALPHA = 0.054
 GAMMA = 70
-MAX_WAVE_HITS = 200 #used in the test loops, if the castle survives this many hits then we move on to the next one
-AVG_WAVE_HEIGHT = 0.05 # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
-AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 # meters 
+MAX_WAVE_HITS = 1000 #used in the test loops, if the castle survives this many hits then we move on to the next one
+AVG_WAVE_HEIGHT = 0.05 * WAVE_MULTIPLIER # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
+AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 * WAVE_MULTIPLIER # meters 
 
 MIN_CASTLE_RADIUS = 0.10 # meters
 MAX_CASTLE_RADIUS = 0.40 # meters
 MIN_CASTLE_HEIGHT = 0.08
 MAX_CASTLE_HEIGHT = 1
-VOL = 0.05 # m^3 | constant for the volume of sand we're using
+
 
 #dictionaries for keeping track of stuff
 erosion_dict = dict()
@@ -173,10 +181,7 @@ def standing_after_erosion(shape, wave) -> bool:
 Loop for testing castle configurations
 '''
 #Stuff for the loopsies
-
-
-INC = 5 + 1 #How many times to loop through wave values
-R = 11 #How many times to build a shape and hit it with waves
+#Don't touch this stuff; the stuff you want to change is up at the very top
 
 #Wave height:
 START_HEIGHT = AVG_WAVE_HEIGHT * .9
@@ -252,7 +257,7 @@ print("Size of cube_array: " + str(len(cube_array)))
 #make an empty array to hold stuff
 cylinder_array = list()
 #time to permute our stuff
-for r in range(1, R):
+for i in range(1, R):
     #Make waves one cm at a time
     for h in range(1, INC):
         #now vary depth for wave break
@@ -260,7 +265,7 @@ for r in range(1, R):
                 #now vary distance past the sandcastle
                 for dist in range(1, INC):
                     #Make a shape and a wave
-                    height = (r / 100.0) + 0.00001 #Adding this to keep form dividing by zero
+                    height = (i * INCREMENT) + START_SHAPE_HEIGHT
                     rad = math.sqrt((VOL) / (math.pi * height))
                     cylinder = shapes.Cylinder(rad, height)
                     #Increment the wave values
@@ -297,7 +302,7 @@ print("Size of cylinder_array: " + str(len(cylinder_array)))
 #make an empty array to hold stuff
 pyramid_array = list()
 #time to permute our stuff
-for l in range(1, 11):
+for h in range(1, R):
     #Make waves one cm at a time
     for h in range(1, INC):
         #now vary depth for wave break
@@ -305,8 +310,8 @@ for l in range(1, 11):
                 #now vary distance past the sandcastle
                 for dist in range(1, INC):
                     #Make a shape and a wave
-                    length = (l / 10) + 0.00001 #Adding this to keep form dividing by zero
-                    height = (3 * VOL) / (length * length)
+                    height = (h * INCREMENT) + START_SHAPE_HEIGHT
+                    length = ((3 * VOL) / height)**.5
                     pyramid = shapes.Pyramid(length, height)
                     #Increment the wave values
                     wave_HEIGHT= (h * HEIGHT_INCREMENT) + START_HEIGHT
