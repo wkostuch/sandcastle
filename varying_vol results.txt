@@ -1,0 +1,98 @@
+MAX_WAVE_HITS = 300
+
+
+VOL = 0.01
+Cube average: 8.136
+Cylinder average: 7.6024
+Pyramid average: 39.92
+Cone average: 51.4264
+
+VOL = 0.02
+Cube average: 14.496
+Cylinder average: 13.5976
+Pyramid average: 71.648
+Cone average: 97.4656
+
+VOL = 0.03
+Cube average: 20.784
+Cylinder average: 19.4464
+Pyramid average: 110.688
+Cone average: 129.6144
+
+VOL = 0.04
+Cube average: 27.144
+Cylinder average: 25.0896
+Pyramid average: 144.736
+Cone average: 148.5672
+
+VOL = 0.05
+Cube average: 33.736
+Cylinder average: 30.724
+Pyramid average: 174.472
+Cone average: 165.632
+
+VOL = 0.06
+Cube average: 40.328
+Cylinder average: 35.9912
+Pyramid average: 196.104
+Cone average: 181.6144
+
+VOL = 0.07
+Cube average: 46.832
+Cylinder average: 41.0816
+Pyramid average: 207.432
+Cone average: 196.424
+
+VOL = 0.08
+Cube average: 54.064
+Cylinder average: 46.4864
+Pyramid average: 228.128
+Cone average: 209.0976
+
+VOL = 0.09
+Cube average: 61.856
+Cylinder average: 52.0808
+Pyramid average: 238.968
+Cone average: 219.5792
+
+VOL = 0.10
+Cube average: 69.672
+Cylinder average: 57.5376
+Pyramid average: 247.744
+Cone average: 228.7072
+
+VOL = 0.11
+Cube average: 77.224
+Cylinder average: 62.5248
+Pyramid average: 257.688
+Cone average: 237.116
+
+VOL = 0.12
+Cube average: 84.752
+Cylinder average: 67.036
+Pyramid average: 264.872
+Cone average: 244.8568
+
+VOL = 0.13
+Cube average: 92.008
+Cylinder average: 71.0912
+Pyramid average: 276.152
+Cone average: 251.7248
+
+VOL = 0.14
+Cube average: 99.208
+Cylinder average: 74.684
+Pyramid average: 278.744
+Cone average: 257.6448
+
+VOL = 0.15
+Cube average: 106.264
+Cylinder average: 77.7096
+Pyramid average: 283.416
+Cone average: 262.8216
+
+VOL = 0.16
+Cube average: 113.08
+Cylinder average: 80.1608
+Pyramid average: 287.664
+Cone average: 267.484

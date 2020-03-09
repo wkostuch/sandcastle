@@ -11,7 +11,7 @@ CONSTANTS for use in the file
 '''
 #Vary these as desired
 VOL = 0.08 # m^3 | constant for the volume of sand we're using | DEFAULT: 0.08
-WAVE_MULTIPLIER = 1.0 #how many time to bump the variable of the wave up | DEFAuLT: 1.0
+WAVE_MULTIPLIER = 1.0 #how many time to bump the variable of the wave up | DEFAULT: 1.0
 MAX_WAVE_HITS = 300 #used in the test loops, if the castle survives this many hits then we move on to the next one |DEFAULT: 1000
 INC = 5 + 1 #How many times to loop through wave values | DEFAULT: 5 + 1
 R = 11 #How many times to build a shape and hit it with waves | DEFAULT: 1001
@@ -30,7 +30,7 @@ J = 1.8663 #Bessel function number
 E = 30 * 1000000 # Pa | Young's Modulus for sand from https://www.nature.com/articles/srep00549
 ALPHA = 0.054
 GAMMA = 70
-AVG_WAVE_HEIGHT = 0.05 * WAVE_MULTIPLIER # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking
+AVG_WAVE_HEIGHT = 0.05 * WAVE_MULTIPLIER # meters | 1.039 m from two bouys off CA and 3 off FL, but that's when the big ones are breaking |DEFAULT: 0.05
 AVG_BREAK_DEPTH = AVG_WAVE_HEIGHT * 1.3 * WAVE_MULTIPLIER # meters 
 AVG_RAINFALL = 0.00508 * RAIN_MULTIPLIER #rainfall in m / hour
 TIME_PER_WAVE = 5.0 # seconds 
