@@ -43,7 +43,6 @@ MAX_CASTLE_RADIUS = 0.40 # meters
 MIN_CASTLE_HEIGHT = 0.08
 MAX_CASTLE_HEIGHT = 1
 
-
 #dictionaries for keeping track of stuff
 erosion_dict = dict()
 knockout_dict = dict()
@@ -250,7 +249,7 @@ INCREMENT = (END_SHAPE_HEIGHT - START_SHAPE_HEIGHT) / (R-1)
 #Cube loop
 #make an empty array to hold results
 cube_array = list()
-#only one way to have a volume of 1 m^3 with a cube
+#only one way to have a volume of VOL m^3 with a cube
 for s in range(1, 2):
     #Make waves one cm at a time
     for h in range(1, INC):
